@@ -1,0 +1,11 @@
+.add-to-cart {
+    transition: 0.3s ease-in-out;
+    position: absolute;
+    bottom: -60px;
+}
+.product-container{
+    position: relative;
+}
+.product-container:hover .add-to-cart {
+    bottom: 0;
+}

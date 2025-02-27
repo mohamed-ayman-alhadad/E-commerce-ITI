@@ -1,0 +1,21 @@
+.Header {
+    height: 40px;
+    width: 100%;
+    background-color: black; 
+    justify-content: center;
+    display: flex;
+    margin-bottom: 50px;
+    color: white;
+    align-items: center;
+}
+
+.Header_Dark{
+    height: 40px;
+    width: 100%;
+    background-color: oklch(0.872 0.01 258.338); 
+    justify-content: center;
+    display: flex;
+    margin-bottom: 50px;
+    color: black;
+    align-items: center;
+}

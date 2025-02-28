@@ -1,8 +1,15 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const navigate = useNavigate();
+//   const userDetails = useSelector((state) => state.auth.userDetails);
+//   console.log(userDetails);
+const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+console.log(userDetails);
+
+  
   return (
     <div className="container">
         <div className="flex justify-between items-center">
@@ -15,7 +22,7 @@ export default function Profile() {
       </div>
       <div>
         <span>Welcome!</span>
-        <span className="text-red-600">Mohamed</span>
+        <span className="text-red-600">{userDetails.name}</span>
       </div>
       </div>
       <div className="w-100 flex gap-4">
@@ -47,7 +54,7 @@ export default function Profile() {
                 type="text"
                 id="fName"
                 className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                placeholder="Last Name"
+                placeholder={userDetails?.name}
               />
             </div>
             <div className="w-50">
@@ -61,7 +68,7 @@ export default function Profile() {
                 type="text"
                 id="fName"
                 className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                placeholder="Last Name"
+                placeholder={userDetails?.name}
               />
             </div>
           </div>
@@ -77,7 +84,7 @@ export default function Profile() {
                 type="email"
                 id="email"
                 className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                placeholder="Email"
+                placeholder={userDetails?.email}
               />
             </div>
             <div className="w-50">
@@ -91,7 +98,7 @@ export default function Profile() {
                 type="text"
                 id="address"
                 className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                placeholder="Address"
+                placeholder="Tant, Egypt"
               />
             </div>
           </div>
@@ -100,7 +107,7 @@ export default function Profile() {
               htmlFor="text"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Passwoed Changes
+              Password Changes
             </label>
             <input
               type="text"

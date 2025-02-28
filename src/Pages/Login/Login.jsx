@@ -7,7 +7,7 @@ import instance from "../../Utils/axiosInstance";
 import { Spinner } from "react-bootstrap";
 import ErrorAlert from "../../components/ErrorAlert/ErrorAlert";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/slices/authSlice";
+import { login, setUserDetails } from "../../redux/slices/authSlice";
 
 function Login() {
   const [apiError, setApiError] = useState(null);
@@ -35,8 +35,11 @@ function Login() {
           setLoading(false);
           navigate("/");
           localStorage.setItem("user", api.data.token);
+          localStorage.setItem("userDetails", JSON.stringify(api.data.user));
           console.log(api.data.token);
+          console.log(api.data.user);
           dispath(login(api.data.token));
+          dispath(setUserDetails(res.data.user));
         }
       })
       .catch((api) => {
@@ -59,12 +62,11 @@ function Login() {
       <div className="flex mt-5 gap-5">
         <img src={sideImage} alt="sideImage" />
         <div className="w-50 px-5 flex flex-col justify-center ">
-           {apiError && <ErrorAlert error={apiError} />}
+          {apiError && <ErrorAlert error={apiError} />}
           <h1 className="mb-3">Log in to Exclusive</h1>
           <p className="mb-5">Enter your details below</p>
 
           <form onSubmit={Formik.handleSubmit} className="max-w-md">
-
             <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
               <input
                 onChange={Formik.handleChange}
@@ -82,8 +84,9 @@ function Login() {
                 Enter your email
               </label>
             </div>
-            {Formik.touched.email && Formik.errors.email &&
-            <ErrorAlert error={Formik.errors.email} /> }
+            {Formik.touched.email && Formik.errors.email && (
+              <ErrorAlert error={Formik.errors.email} />
+            )}
             <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
               <input
                 onChange={Formik.handleChange}
@@ -101,13 +104,19 @@ function Login() {
                 Password
               </label>
             </div>
-            {Formik.touched.password && Formik.errors.password &&
-            <ErrorAlert error={Formik.errors.password} /> }
+            {Formik.touched.password && Formik.errors.password && (
+              <ErrorAlert error={Formik.errors.password} />
+            )}
             <div className="flex justify-between">
-              <button type="submit" className="text-white bg-red-600 px-5 py-3 rounded hover:bg-red-700 font-medium">
-                {loading ? <Spinner/> : "Login"}
+              <button
+                type="submit"
+                className="text-white bg-red-600 px-5 py-3 rounded hover:bg-red-700 font-medium"
+              >
+                {loading ? <Spinner /> : "Login"}
               </button>
-              <button type="button" className="text-red-600">Forget Password</button>
+              <button type="button" className="text-red-600">
+                Forget Password
+              </button>
             </div>
           </form>
         </div>

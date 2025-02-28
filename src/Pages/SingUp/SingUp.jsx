@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import instance from "../../Utils/axiosInstance";
 import ErrorAlert from "../../components/ErrorAlert/ErrorAlert";
 import { Spinner } from "react-bootstrap";
-import { login } from "../../redux/slices/authSlice";
+import { login, setUserDetails } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 function SingUp() {
   const [apiError, setApiError] = useState(null);
@@ -49,8 +49,10 @@ function SingUp() {
           setLoading(false); 
           navigate("/login");
           localStorage.setItem("user", res.data.token);
+          localStorage.setItem("userDetails", JSON.stringify(res.data.user));
           console.log(res.data.token);
           dispatch(login(res.data.token));
+          dispatch(setUserDetails(res.data.user));
           
         }
       })

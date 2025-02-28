@@ -57,7 +57,7 @@ function Card({ name, price, image, id, product }) {
       </Modal>
 
       <div
-        style={{ height: "350px", width: "270px" }}
+        style={{ height: "350px", width: "260px" }}
         className="flex flex-col rounded  relative shadow-md"
       >
         <div

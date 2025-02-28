@@ -33,7 +33,7 @@ const openMunue = () => {
                 {routes.map((route) => (
                     <li key={route.href} className="" >
                         <NavLink style={{ textDecoration: "none" }} className={({ isActive }) => isActive ? theme === "light" ? "text-blue " : "" : theme === "light" ? "text-black" : "text-white"} to={route.href}>
-                            {route.label}
+                        {user ? (route.label=== "Sing Up" ? "" : route.label) : route.label}
                         </NavLink>
                     </li>
                 ))}

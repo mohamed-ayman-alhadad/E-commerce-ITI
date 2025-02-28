@@ -4,6 +4,8 @@ import search from '../../assets/Images/search.png'
 import { NavLink, useNavigate } from 'react-router-dom';
 import routes from './routes';
 import { useSelector } from 'react-redux';
+import Icon from './IconProfile/Icon';
+import { use } from 'react';
 function Nav({ theme }) {
     const navigation = useNavigate();
     const goToCart = () => {
@@ -13,6 +15,7 @@ function Nav({ theme }) {
         navigation("/wishlist");
     }
 
+    const user = useSelector((state) => state.auth.user);
 const cart = useSelector((state) => state.cart);
 const favList = useSelector((state) => state.Fav.favProducts);
     return (<>
@@ -38,13 +41,17 @@ const favList = useSelector((state) => state.Fav.favProducts);
                     </div>
                 </div>
                 <div className="mx-4 relative ">
-                    <img src={favourit}  onClick={()=>goTowishlist()} />
-                    <div className='absolute w-5 h-5  bg-red-500 rounded-full badge text-center px-0 ' style={{ top: "-25px", right: "-18px" }}>{favList.length}</div>
+                    <img src={favourit}  onClick={user && goTowishlist} />
+                    {user && 
+                    <div className='absolute w-5 h-5  bg-red-500 rounded-full badge text-center px-0 ' style={{ top: "-20px", right: "-18px" }}>{favList.length}</div>
+                    }
                 </div>
-                <div className='relative'><img src={Cart1} onClick={() => goToCart()} />
+                <div className='relative'><img src={Cart1} onClick={user && goToCart} />
+                {user && 
                     <div className='absolute w-5 h-5  bg-red-500 rounded-full badge text-center px-0 ' style={{ top: "-20px", right: "-18px" }}>{cart.totalQuantity}</div>
-
+                }
                 </div>
+                {user && <Icon/> }
             </div>
         </nav >
 

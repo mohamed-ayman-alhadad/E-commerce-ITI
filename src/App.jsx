@@ -18,6 +18,7 @@ import Cart from './Pages/Cart/Cart';
 import WishList from './Pages/WishList/WishList';
 import Login from './Pages/Login/Login';
 import NotFound from './Pages/Not Found/NotFound';
+import Profile from './Pages/Profile/Profile';
 
 function App() {
 
@@ -33,7 +34,8 @@ function App() {
         { path: "cart", element: <Cart /> },
         { path: "wishlist", element:<WishList/> },
         { path: "login", element: <Login/> },
-        { path: "*", element:<NotFound/> }
+        {path:"profile",element:<Profile/>},
+        { path: "*", element:<NotFound/> },
       ]
     }
   ])

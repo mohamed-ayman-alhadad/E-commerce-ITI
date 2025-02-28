@@ -8,11 +8,13 @@ import { useFormik } from "formik";
 import instance from "../../Utils/axiosInstance";
 import ErrorAlert from "../../components/ErrorAlert/ErrorAlert";
 import { Spinner } from "react-bootstrap";
+import { login } from "../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 function SingUp() {
   const [apiError, setApiError] = useState(null);
   const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")
@@ -41,9 +43,16 @@ function SingUp() {
     console.log(values, "values");
     await instance
       .post("/auth/signup", values)
-      .then(function (api) {
-        setLoading(false);
-        console.log(api);
+      .then( (res)=> {
+      
+        if (res.data.message === "success") {
+          setLoading(false); 
+          navigate("/login");
+          localStorage.setItem("user", res.data.token);
+          console.log(res.data.token);
+          dispatch(login(res.data.token));
+          
+        }
       })
       .catch((api) => {
         setLoading(false);
@@ -248,6 +257,7 @@ function SingUp() {
             <p className="text-center fs-5 flex justify-center ">
               Already have an account?{" "}
               <button
+              type="button"
                 onClick={() => navigate("/login")}
                 className="text-red-600 px-3"
               >

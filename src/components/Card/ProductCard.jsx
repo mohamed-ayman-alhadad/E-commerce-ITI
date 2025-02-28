@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { use, useContext, useState } from "react";
 import star from "../../assets/Images/stared.png";
 import unstar from "../../assets/Images/Unstar.png";
 import { useNavigate } from "react-router-dom";
@@ -7,21 +7,25 @@ import fav from "../../assets/Images/fav.png";
 import faved from "../../assets/Images/faved.png";
 import overview from "../../assets/Images/overview.png";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/slices/cartSlice";
+import { addToCart, removeFromCart } from "../../redux/slices/cartSlice";
 import { addToFavList, removeFromFavList } from "../../redux/slices/favSlice";
+import { Button, Modal } from "react-bootstrap";
 
-function Card({ name, price, image, id, product, added }) {
+function Card({ name, price, image, id, product }) {
+  const [isAdded, setIsAdded] = useState(false);
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
   const favList = useSelector((state) => state.Fav.favProducts);
-  const favproduct =favList.find((product) => product.id === id);
+  const favproduct = favList.find((product) => product.id === id);
+  const user = useSelector((state) => state.auth.user);
   const goToDetailes = (id) => {
     navigation(`/products/${id}`);
   };
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
+    setIsAdded(true);
   };
 
   const toggleFavourite = () => {
@@ -32,15 +36,32 @@ function Card({ name, price, image, id, product, added }) {
     }
   };
 
+  const handleClose = () => setIsAdded(false);
+
   return (
     <>
+      <Modal
+        show={isAdded}
+        onHide={handleClose}
+        backdrop="true"
+        keyboard={false}
+        
+      >
+        <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">Product added to cart successfully
+        <Button variant="success" onClick={handleClose}>
+          Close
+        </Button>
+        </Modal.Body>
+
+       
+      </Modal>
+
       <div
-        style={{ height: "350px", width: "280px" }}
+        style={{ height: "350px", width: "260px" }}
         className="flex flex-col rounded  relative shadow-md"
       >
-        
         <div
-          onClick={() => toggleFavourite()}
+          onClick={user && toggleFavourite}
           className="absolute top-3 right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
@@ -54,21 +75,13 @@ function Card({ name, price, image, id, product, added }) {
             style={{ width: "100%", height: "270px" }}
           >
             <img src={image} style={{ width: "115px", height: "180px" }} />
-            {!added ? (
-              <div
-                onClick={handleAddToCart}
-                className="w-100 text-center py-3 text-white bg-black  add-to-cart"
-              >
-                Add to Cart
-              </div>
-            ) : (
-              <div
-                onClick={handleRemoveFromCart}
-                className="w-100 text-center py-3 text-white bg-black  add-to-cart"
-              >
-                Remove from Cart
-              </div>
-            )}
+
+            <div
+              onClick={user ? handleAddToCart : () => navigation("/login")}
+              className="w-100 text-center py-3 text-white bg-black  add-to-cart"
+            >
+              Add to Cart
+            </div>
           </div>
         </div>
         <div className="bg-white rounded-b-lg relative">
@@ -103,7 +116,7 @@ function Card({ name, price, image, id, product, added }) {
             </ul>
             <p className="text-gray-500"> (95)</p>
             <button
-              onClick={() => goToDetailes(id)}
+              onClick={user && (() => goToDetailes(id))}
               className=" bg-black text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
             >
               Details

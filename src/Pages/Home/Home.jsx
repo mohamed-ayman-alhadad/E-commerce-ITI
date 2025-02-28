@@ -38,6 +38,8 @@ function Home() {
           <p className="text-sm">We reurn money within 30 days</p>
         </div>
       </div>
+
+
     </>
   );
 }

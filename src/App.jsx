@@ -19,6 +19,7 @@ import WishList from './Pages/WishList/WishList';
 import Login from './Pages/Login/Login';
 import NotFound from './Pages/Not Found/NotFound';
 import Profile from './Pages/Profile/Profile';
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function App() {
 

@@ -5,6 +5,7 @@
     justify-content: center;
     display: flex;
     margin-bottom: 50px;
+    margin-right: 20px;
     color: white;
     align-items: center;
 }
@@ -18,4 +19,5 @@
     margin-bottom: 50px;
     color: black;
     align-items: center;
+    margin-right: 20px;
 }

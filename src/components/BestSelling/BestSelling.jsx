@@ -44,11 +44,13 @@ export default function BestSelling() {
           </div>
           </div>
         </div>}
+        <div className='flex flex-wrap gap-4 justify-center'>
             {data?.map((item , index) => {
                 if(index < 4){
                     return <Card key={item.id} name={item.title} price={item.price} image={item.imageCover} id={item.id} product={item} added={item.added} />
                 }
             })}
+            </div>
          </div>
    </>
   )

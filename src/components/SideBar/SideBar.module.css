@@ -1,15 +1,15 @@
 .SideBar {
     width: 25% !important;
-    display: flex !important;
+    display: flex ;
     flex-direction: column !important;
     gap: 1rem !important;
-    border-right: 1px solid black !important;
+    border-right: 1px solid black   ;
     padding-top: 3rem !important;
 }
 
 .SideBar_Dark {
     width: 25% !important;
-    display: flex !important;            
+    display: flex ;            
     flex-direction: column !important;
     gap: 1rem !important;
     border-right: 1px solid  oklch(0.872 0.01 258.338) !important;

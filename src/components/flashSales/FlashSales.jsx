@@ -33,7 +33,7 @@ export default function FlashSales() {
       <div className="container flex mb-4">
         <div className="flex items-center justify-between w-50">
         <h2 className="font-bold m-0">Flash Sales</h2>
-        <div className="flex gap-3 items-end  ">
+        <div className="flex gap-3 items-end d-none d-md-flex  ">
             <div className="flex flex-col items-center gap-1">
                 <p className="text-xs m-0 ">Days</p>
                 <h2>03</h2>
@@ -65,13 +65,14 @@ export default function FlashSales() {
         className="flex container justify-center overflow-x-scroll "
         style={{ scrollbarWidth: "none" }}
       >
-        <div className="flex gap-4 mb-5">
+        <div className="flex gap-4 justify-center mb-5">
           {isLoading &&<div className="container  "> <div className=" h-56 flex items-center justify-center rounded-lg  ">
           <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
             loading...
           </div>
           </div>
         </div>}
+
           {data?.map((product) => (
             <Card
               key={product.id}

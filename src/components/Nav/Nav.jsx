@@ -5,8 +5,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import routes from './routes';
 import { useSelector } from 'react-redux';
 import Icon from './IconProfile/Icon';
-import { use } from 'react';
+import { GiHamburgerMenu } from "react-icons/gi";
+import { useState } from 'react';
+
 function Nav({ theme }) {
+    const[show, setShow] = useState(false)
     const navigation = useNavigate();
     const goToCart = () => {
         navigation("/cart");
@@ -18,14 +21,18 @@ function Nav({ theme }) {
     const user = useSelector((state) => state.auth.user);
 const cart = useSelector((state) => state.cart);
 const favList = useSelector((state) => state.Fav.favProducts);
+
+const openMunue = () => {
+    setShow(!show)
+}
     return (<>
         <nav className="d-flex w-100 container justify-content-between align-items-center ">
             <h2 className='mb-0'>Exclusive</h2>
 
-            <ul className="d-flex list-unstyled  align-items-center gap-5 h-100 mb-0  ">
+            <ul className={show ? "d-flex flex-column position-absolute rounded right-15 top-30  w-30 bg-gradient-to-r from-blue-300 to-white  z-10 h-55 list-unstyled  align-items-center gap-3  mb-0 d-lg-none"  :"d-flex list-unstyled  align-items-center gap-5 h-100 mb-0 d-none d-lg-flex"}>
                 {routes.map((route) => (
-                    <li key={route.href} >
-                        <NavLink style={{ textDecoration: "none" }} className={({ isActive }) => isActive ? theme === "light" ? "text-blue-500" : "" : theme === "light" ? "text-black" : "text-white"} to={route.href}>
+                    <li key={route.href} className="" >
+                        <NavLink style={{ textDecoration: "none" }} className={({ isActive }) => isActive ? theme === "light" ? "text-blue " : "" : theme === "light" ? "text-black" : "text-white"} to={route.href}>
                             {route.label}
                         </NavLink>
                     </li>
@@ -53,6 +60,7 @@ const favList = useSelector((state) => state.Fav.favProducts);
                 </div>
                 {user && <Icon/> }
             </div>
+                <GiHamburgerMenu className='d-lg-none' onClick={() => openMunue()} />
         </nav >
 
     </>);

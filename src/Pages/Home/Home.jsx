@@ -12,7 +12,7 @@ import headphone from "../../assets/Images/headphone.png";
 function Home() {
   return (
     <>
-      <div className="d-flex flex-wrap container  p-0 mb-5 ">
+      <div className="d-flex flex-wrap justify-center container  p-0 mb-5 ">
         <SideBar />
         <Main />
       </div>
@@ -21,7 +21,7 @@ function Home() {
       <BestSelling />
       <img src={background} className="container pt-5" />
       <Featured />
-      <div className="container flex justify-around mt-50">
+      <div className="container flex flex-wrap gap-3 justify-around mt-50">
         <div className="flex flex-col items-center">
           <img src={bus} className="w-18 h-18 mb-4" />
           <h5 className="font-bold">FREE AND FAST DELIVERY</h5>

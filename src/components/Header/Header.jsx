@@ -26,14 +26,15 @@ function Header() {
 
 
     return <>
-        <div className=" w-100 ">
+        <div className=" w-100  ">
+            <div className="flex justify-between gap-5">
             <div className={theme === "light" ? style.Header : style.Header_Dark}>
-                <button className={theme === "light" ? "btn btn-dark" : "btn btn-gray-300 text-black"} onClick={toggleTheme}>
+                <button className={theme === "light" ? "btn btn-dark mx-5" : "btn btn-gray-300 text-black mx-5"} onClick={toggleTheme}>
                     {theme === "light" ? "Dark Mode" : "Light Mode"}
                 </button>
 
 
-                <div className="w-75 d-flex align-items-center  justify-content-center  ">
+                <div className="w-75 d-flex align-items-center  justify-content-center  d-md-flex d-none  ">
                     <p className="mb-0">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</p>
                     <a href="" className={theme === "light" ? "btn btn-dark" : "btn btn-gray-300 text-black"}> shop Now</a>
                 </div>
@@ -60,6 +61,7 @@ function Header() {
                             </li>
                         </ul>
                     )}
+                </div>
                 </div>
 
             </div>

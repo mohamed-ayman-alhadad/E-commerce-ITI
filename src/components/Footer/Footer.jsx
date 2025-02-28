@@ -25,7 +25,7 @@ function Footer() {
             theme === "light" ? "bg-black text-white" : "bg-gray-300 text-dark"
           }`}
         >
-          <div className="container">
+          <div className="container gap-3">
             <div className="row">
               <div className="col-md-3 relative h-37">
                 <h5>Exclusive</h5>

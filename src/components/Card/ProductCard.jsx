@@ -7,12 +7,13 @@ import fav from "../../assets/Images/fav.png";
 import faved from "../../assets/Images/faved.png";
 import overview from "../../assets/Images/overview.png";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/slices/cartSlice";
+import { addToCart } from "../../redux/slices/cartSlice";
 import { addToFavList, removeFromFavList } from "../../redux/slices/favSlice";
 import { Button, Modal } from "react-bootstrap";
 
-function Card({ name, price, image, id, product }) {
+function Card({ name, price, image, id, product , isFlash }) {
   const [isAdded, setIsAdded] = useState(false);
+  const[isloggedIn, setIsLoggedIn] = useState(false)
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
@@ -37,7 +38,7 @@ function Card({ name, price, image, id, product }) {
   };
 
   const handleClose = () => setIsAdded(false);
-
+const handleCloseloggedIn = () => setIsLoggedIn(false)
   return (
     <>
       <Modal
@@ -48,8 +49,21 @@ function Card({ name, price, image, id, product }) {
         
       >
         <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">Product added to cart successfully
-        <Button variant="success" onClick={handleClose}>
-          Close
+         
+        </Modal.Body>
+
+       
+      </Modal>
+      <Modal
+        show={isloggedIn}
+        onHide={handleCloseloggedIn}
+        backdrop="true"
+        keyboard={false}
+        
+      >
+        <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">you are not logged in
+        <Button variant="success" onClick={(() => handleCloseloggedIn() , () => navigation("/login"))}>
+          Login
         </Button>
         </Modal.Body>
 
@@ -57,11 +71,14 @@ function Card({ name, price, image, id, product }) {
       </Modal>
 
       <div
-        style={{ height: "350px", minWidth: "280px" }}
+        style={isFlash ? { height: "400px", minWidth: "280px", maxWidth:"300px" } : { height: "350px", minWidth: "280px" , maxWidth:"300px"}}
         className="flex flex-col rounded  relative shadow-md"
       >
+        {isFlash&&(<div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
+         %{Math.floor(Math.random() * 100)}
+        </div>)}
         <div
-          onClick={user && toggleFavourite}
+          onClick={user ?  toggleFavourite : () => setIsLoggedIn(true)}
           className="absolute top-3 right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
@@ -77,7 +94,7 @@ function Card({ name, price, image, id, product }) {
             <img src={image} style={{ width: "115px", height: "180px" }} />
 
             <div
-              onClick={user ? handleAddToCart : () => navigation("/login")}
+              onClick={user ? handleAddToCart : () => setIsLoggedIn(true)}
               className="w-100 text-center py-3 text-white bg-black  add-to-cart"
             >
               Add to Cart
@@ -100,16 +117,20 @@ function Card({ name, price, image, id, product }) {
           >
             {name}
           </p>
-          <div className="flex gap-2 ms-1  ">
+          <div className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}>
+            <div className="flex gap-2 ">
             <p className="text-red-700">${price}</p>
-            <ul className="flex align-items-center me-1 ps-0 ">
+            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + Math.floor(Math.random() * 1000)}</p>}
+            </div>
+           <div className="flex gap-4 items-center ">
+           <ul className="flex align-items-center me-1 ps-0 ">
               <li>
                 <img src={star} alt="" />
               </li>
               <li>
                 <img src={star} alt="" />
               </li>
-              <li>
+              <li> 
                 <img src={star} alt="" />
               </li>
               <li>
@@ -121,11 +142,13 @@ function Card({ name, price, image, id, product }) {
             </ul>
             <p className="text-gray-500"> (95)</p>
             <button
-              onClick={user && (() => goToDetailes(id))}
+              onClick={user ? (() => goToDetailes(id)): () => setIsLoggedIn(true)}
               className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
             >
               Details
             </button>
+           </div>
+          
           </div>
         </div>
       </div>

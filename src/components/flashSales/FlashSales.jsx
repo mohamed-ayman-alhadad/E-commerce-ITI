@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import Card from "../Card/ProductCard";
 import instance from "../../Utils/axiosInstance";
 import LeftArrow from "../../assets/Images/LeftArrow.png";
 import RightArrow from "../../assets/Images/RightArrow.png";
 import { useNavigate } from "react-router-dom";
 export default function FlashSales() {
+  const[isFlash, setIsFlash] = useState(true)
   const { data, isLoading, error } = useQuery({
     queryKey: ["flashSales"],
     queryFn: async () => {
@@ -62,7 +63,7 @@ export default function FlashSales() {
 
          </div>
       <div
-        className="flex container gap-4 mb-5  overflow-x-scroll "
+        className="flex container gap-4 mb-5 py-2  overflow-x-scroll "
         style={{ scrollbarWidth: "none" }}
       >
           {isLoading &&
@@ -82,6 +83,7 @@ export default function FlashSales() {
               price={product.price}
               image={product.imageCover}
               product={product}
+              isFlash={isFlash}
             />
             // </div>
           ))}

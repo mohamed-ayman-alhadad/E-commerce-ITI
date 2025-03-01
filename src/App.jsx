@@ -20,6 +20,7 @@ import Login from './Pages/Login/Login';
 import NotFound from './Pages/Not Found/NotFound';
 import Profile from './Pages/Profile/Profile';
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import CheckOut from './Pages/CheckOut/CheckOut';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
         { path: "wishlist", element:<WishList/> },
         { path: "login", element: <Login/> },
         {path:"profile",element:<Profile/>},
+        { path: "checkout", element: <CheckOut/> },
         { path: "*", element:<NotFound/> },
       ]
     }

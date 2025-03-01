@@ -9,6 +9,7 @@ import Featured from "../../components/Featured/featured";
 import moneyBack from "../../assets/Images/moneyBack.png";
 import bus from "../../assets/Images/Services (1).png";
 import headphone from "../../assets/Images/headphone.png";
+import CheckOut from "../CheckOut/CheckOut";
 function Home() {
   return (
     <>
@@ -38,7 +39,6 @@ function Home() {
           <p className="text-sm">We reurn money within 30 days</p>
         </div>
       </div>
-
 
     </>
   );

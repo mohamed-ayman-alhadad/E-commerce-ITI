@@ -88,10 +88,15 @@ function Card({ name, price, image, id, product }) {
           <p
             className={
               theme === "light"
-                ? "pt-2 mb-1  h-14 overflow-hidden ms-1"
-                : "pt-2 mb-1 h-14 overflow-hidden ms-1 text-black"
+                ? "pt-2 m-0  h-10 overflow-hidden ms-1"
+                : "pt-2 m-0 h-10 overflow-hidden ms-1 text-black"
             }
-            style={{ height: "39px" }}
+            style={{
+              whiteSpace: "nowrap",
+              width: "200px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
           >
             {name}
           </p>
@@ -117,7 +122,7 @@ function Card({ name, price, image, id, product }) {
             <p className="text-gray-500"> (95)</p>
             <button
               onClick={user && (() => goToDetailes(id))}
-              className=" bg-black text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
+              className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
             >
               Details
             </button>

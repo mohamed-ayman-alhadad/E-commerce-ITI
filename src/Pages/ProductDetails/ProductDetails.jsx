@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../Utils/axiosInstance";
 import star from "../../assets/Images/stared.png";
 import unstar from "../../assets/Images/Unstar.png";
@@ -11,7 +11,9 @@ import { addToFavList, removeFromFavList } from "../../redux/slices/favSlice";
 import delevary from "../../assets/Images/icon-delivery.png";
 import Return from "../../assets/Images/Icon-return.png";
 import { Spinner } from "react-bootstrap";
+import { addToCart } from "../../redux/slices/cartSlice";
 function ProductDetails() {
+  const navigate = useNavigate();
   const [Sizes, setSizes] = useState([
     {
       id: 1,
@@ -74,7 +76,10 @@ function ProductDetails() {
   };
   const favproduct =favList.find((product) => product.id === params.id);
 
-
+const goToBuy = () => {
+  dispatch(addToCart(data));
+  navigate("/checkout");
+};
    const toggleFavourite = () => {
       if (favproduct) {
         dispatch(removeFromFavList(data));
@@ -220,7 +225,7 @@ function ProductDetails() {
                 </svg>
               </button>
             </div>
-            <button className=" bg-red-600 px-5 py-2 text-white rounded-2">Buy Now</button>
+            <button onClick={()=> goToBuy()} className=" bg-red-600 px-5 py-2 hover:bg-red-800 text-white rounded-2">Buy Now</button>
             <button onClick={() => toggleFavourite()} className="border border-gray-300 px-2 py-2 rounded-2">
                 <img src={favproduct ?faved :fav } className="w-6 h-6" /></button>
           </div>

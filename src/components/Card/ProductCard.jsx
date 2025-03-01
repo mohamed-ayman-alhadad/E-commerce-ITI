@@ -61,8 +61,8 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
         keyboard={false}
         
       >
-        <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">you are not logged in
-        <Button variant="success" onClick={(() => handleCloseloggedIn() , () => navigation("/login"))}>
+        <Modal.Body className="flex justify-between items-center rounded bg-red-500 text-white  ">you are not logged in
+        <Button variant="danger" onClick={(() => handleCloseloggedIn() , () => navigation("/login"))}>
           Login
         </Button>
         </Modal.Body>

@@ -27,6 +27,7 @@ function Card({ name, price, image, id, product , isFlash }) {
   const handleAddToCart = () => {
     dispatch(addToCart(product));
     setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 1000);
   };
 
   const toggleFavourite = () => {
@@ -45,29 +46,25 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
         show={isAdded}
         onHide={handleClose}
         backdrop="true"
-        keyboard={false}
-        
+        keyboard={false} 
       >
         <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">Product added to cart successfully
-         
         </Modal.Body>
-
-       
       </Modal>
+
+
+
       <Modal
         show={isloggedIn}
         onHide={handleCloseloggedIn}
         backdrop="true"
         keyboard={false}
-        
       >
         <Modal.Body className="flex justify-between items-center rounded bg-red-500 text-white  ">you are not logged in
-        <Button variant="danger" onClick={(() => handleCloseloggedIn() , () => navigation("/login"))}>
-          Login
+        <Button variant="danger" onClick={(() => handleCloseloggedIn() , () => navigation("/sing up"))}>
+          Sing Up
         </Button>
         </Modal.Body>
-
-       
       </Modal>
 
       <div
@@ -79,7 +76,7 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
         </div>)}
         <div
           onClick={user ?  toggleFavourite : () => setIsLoggedIn(true)}
-          className="absolute top-3 right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center"
+          className="absolute top-3 right-3 w-8 h-8 z-1 hover:bg-gray-200 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
         </div>

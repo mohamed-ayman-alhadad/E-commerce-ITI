@@ -23,11 +23,11 @@ export default function Featured() {
         </div>
          
       </div>
-      <div className="flex flex-wrap gap-3 container mb-5 justify-center" >
-        <div className=" h-100" style={{height:"600px",width:"45%" }}>
+      <div className="flex flex-wrap gap-3 container mb-5 " >
+        <div className=" h-100" style={{height:"600px",width:"48.5%" }}>
             <img src={Feature1} alt="" style={{height:"600px",width:"100%" }} />
         </div>
-        <div className="flex flex-col  gap-3 h-100 p-0 ">
+        <div className="flex flex-col w-50  gap-3 h-100 p-0 ">
             <img src={Feature2} alt="" style={{height:"284px",width:"100%" }} />
             <div className="flex gap-3" style={{height:"284px",width:"100%" }}>
                 <img src={Feature3} alt="" style={{height:"297px",width:"50%" }} />

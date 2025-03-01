@@ -51,9 +51,9 @@ function ProductsPage() {
   }
   return (
     <>
-      <div className="container py-5">
+      <div className="container justify-center py-5">
         <ProductLable />
-        <div className="flex flex-wrap p-0 container gap-4  ">
+        <div className="flex flex-wrap p-0 container justify-center gap-5  ">
           {products.products &&
             products.products.map((product) => (
               <Card

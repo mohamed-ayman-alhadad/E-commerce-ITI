@@ -62,11 +62,11 @@ export default function FlashSales() {
 
          </div>
       <div
-        className="flex container justify-center overflow-x-scroll "
+        className="flex container gap-4 mb-5  overflow-x-scroll "
         style={{ scrollbarWidth: "none" }}
       >
-        <div className="flex gap-4 justify-center mb-5">
-          {isLoading &&<div className="container  "> <div className=" h-56 flex items-center justify-center rounded-lg  ">
+          {isLoading &&
+          <div className="container flex justify-center "> <div className=" h-56 flex items-center justify-center rounded-lg  ">
           <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
             loading...
           </div>
@@ -74,6 +74,7 @@ export default function FlashSales() {
         </div>}
 
           {data?.map((product) => (
+            // <div style={{minWidth:"280px"}}>
             <Card
               key={product.id}
               id={product.id}
@@ -82,8 +83,8 @@ export default function FlashSales() {
               image={product.imageCover}
               product={product}
             />
+            // </div>
           ))}
-        </div>
       </div>
       <div className="flex justify-center border-b-1 container border-gray-300 pb-5 mb-5">
       <button onClick={() => navigate("/products")} className="text-white  bg-red-600 border-0 py-3 px-6 focus:outline-none hover:bg-red-800 rounded">View All Products</button>

@@ -111,7 +111,7 @@ const handleClose = () => setIsAdded(false);
       >
         <div
           onClick={() => showModal()}
-          className="absolute top-3 right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center"
+          className="absolute top-3 cursor-pointer right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={trash} className="w-4 h-4"></img>
         </div>
@@ -127,7 +127,7 @@ const handleClose = () => setIsAdded(false);
           </div>
           <div
             onClick={() => handleAddToCart()}
-            className="w-100 text-center py-3 text-white bg-black absolute bottom-0 flex justify-center gap-2 "
+            className="w-100 text-center py-3 cursor-pointer text-white bg-black absolute bottom-0 flex justify-center gap-2 "
           >
             <img src={Cart} />
             <span>Add to Cart</span>
@@ -154,7 +154,7 @@ const handleClose = () => setIsAdded(false);
 
             <button
               onClick={() => goToDetailes(product.id)}
-              className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-3"
+              className=" bg-red-600 hover:bg-red-800 text-white rounded-2 cursor-pointer px-2 py-0.5 mx-3 mb-3"
             >
               Details
             </button>

@@ -106,7 +106,7 @@ function About() {
         </div>
       </div>
 
-      <div className="container flex justify-around mt-80">
+      <div className="container flex justify-around mt-50">
         <div className="flex flex-col items-center">
             <img src={bus} className="w-18 h-18 mb-4" />
             <h5 className="font-bold">FREE AND FAST DELIVERY</h5>

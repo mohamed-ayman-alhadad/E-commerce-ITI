@@ -78,7 +78,7 @@ function Nav({ theme }) {
             </div>
           </div>
           {user && (
-            <div className="mx-4 relative ">
+            <div className="mx-4 cursor-pointer relative ">
               <img src={favourit} onClick={user && goTowishlist} />
 
               <div
@@ -90,7 +90,7 @@ function Nav({ theme }) {
             </div>
           )}
           {user && (
-            <div className="relative">
+            <div className="relative ">
               <img src={Cart1} onClick={user && goToCart} />
               <div
                 className="absolute w-5 h-5  bg-red-500 rounded-full badge text-center px-0 "

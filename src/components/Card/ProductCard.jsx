@@ -72,15 +72,15 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
         className="flex flex-col rounded  relative shadow-md"
       >
         {isFlash&&(<div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
-         %{Math.floor(Math.random() * 100)}
+         25%
         </div>)}
         <div
           onClick={user ?  toggleFavourite : () => setIsLoggedIn(true)}
-          className="absolute top-3 right-3 w-8 h-8 z-1 hover:bg-gray-200 rounded-4xl bg-white flex justify-center items-center"
+          className="absolute top-3 right-3 w-8 h-8 z-1 cursor-pointer hover:bg-gray-200 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
         </div>
-        <div className="absolute top-13 right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center">
+        <div className="absolute top-13 cursor-pointer right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center">
           <img src={overview} className="w-7 h-7"></img>
         </div>
         <div className=" p-0">
@@ -92,7 +92,7 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
 
             <div
               onClick={user ? handleAddToCart : () => setIsLoggedIn(true)}
-              className="w-100 text-center py-3 text-white bg-black  add-to-cart"
+              className="w-100 text-center py-3 text-white bg-black cursor-cell  add-to-cart"
             >
               Add to Cart
             </div>
@@ -115,9 +115,9 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
             {name}
           </p>
           <div className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}>
-            <div className="flex gap-2 ">
+            <div className="flex gap-4 ">
             <p className="text-red-700">${price}</p>
-            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + Math.floor(Math.random() * 1000)}</p>}
+            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + 1000}</p>}
             </div>
            <div className="flex gap-4 items-center ">
            <ul className="flex align-items-center me-1 ps-0 ">

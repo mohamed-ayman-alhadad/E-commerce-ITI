@@ -27,7 +27,7 @@ function Card({ name, price, image, id, product , isFlash }) {
   const handleAddToCart = () => {
     dispatch(addToCart(product));
     setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 1000);
+    setTimeout(() => setIsAdded(false), 700);
   };
 
   const toggleFavourite = () => {

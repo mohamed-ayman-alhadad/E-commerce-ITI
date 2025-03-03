@@ -72,7 +72,8 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
         className="flex flex-col rounded  relative shadow-md"
       >
         {isFlash&&(<div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
-         25%
+         {Math.floor(price / 1000)}%
+         
         </div>)}
         <div
           onClick={user ?  toggleFavourite : () => setIsLoggedIn(true)}
@@ -117,7 +118,7 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
           <div className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}>
             <div className="flex gap-4 ">
             <p className="text-red-700">${price}</p>
-            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + 1000}</p>}
+            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + (100* Math.floor(price / 1000))}</p>}
             </div>
            <div className="flex gap-4 items-center ">
            <ul className="flex align-items-center me-1 ps-0 ">

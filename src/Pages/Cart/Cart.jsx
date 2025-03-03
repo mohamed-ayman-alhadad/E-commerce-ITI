@@ -1,16 +1,21 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useContext } from "react";
 import ThemeContext from "../../Contexts/StatesContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
 import isEmpty from "../../assets/Images/empty.png";
+import { clearCart } from "../../redux/slices/cartSlice";
 function Cart() {
   const { Cartproducts } = useSelector((state) => state.cart);
   const { theme } = useContext(ThemeContext);
   const navigation = useNavigate();
-
+const dispatch = useDispatch();
   const continueShoping = () => {
     navigation("/products");
+  };
+
+  const clearCartItems = () => {
+    dispatch(clearCart());
   };
   return (
     <div>
@@ -64,8 +69,8 @@ function Cart() {
             >
               Return to Shop
             </button>
-            <button className="border rounded border-gray-300 text-gray-900 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200  text-sm px-5 py-2.5 text-center">
-              Update Cart
+            <button onClick={()=>clearCartItems()} className="border rounded border-gray-300 text-gray-900 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200  text-sm px-5 py-2.5 text-center">
+              Clear Cart
             </button>
           </div>
 

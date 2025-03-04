@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { removeFromFavList } from "../../redux/slices/favSlice";
 import Cart from "../../assets/Images/Cart2.png";
 import { addToCart } from "../../redux/slices/cartSlice";
-import { Modal } from "react-bootstrap";
+import { Modal, Toast } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
 function WishListCard({ product }) {
   const [removed, setRemoved] = useState(false);
   const[isAdded,setIsAdded]=useState(false)
@@ -17,13 +18,21 @@ function WishListCard({ product }) {
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 700);
+    toast.success("Product added to cart successfully",{
+            theme: "colored",
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+     
   };
   const showModal = () => setRemoved(true);
-const handleClose = () => setIsAdded(false);
   return (
     <>
+    <ToastContainer />
       {removed && (
         <Modal
           show={removed}
@@ -95,16 +104,7 @@ const handleClose = () => setIsAdded(false);
         </Modal>
       )}
 
-      <Modal
-        show={isAdded}
-        onHide={handleClose}
-        backdrop="true"
-        keyboard={false}
-      >
-        <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">
-          Product added to cart successfully
-        </Modal.Body>
-      </Modal>
+       
       <div
         style={{ height: "350px", width: "280px" }}
         className="flex flex-col rounded  relative shadow-md"

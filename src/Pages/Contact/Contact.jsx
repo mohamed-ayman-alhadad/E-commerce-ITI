@@ -1,14 +1,28 @@
 import React from "react";
-import { useState } from "react";
 import style from "./Contact.module.css";
 import { useNavigate } from "react-router-dom";
 import icon_phone from "../../assets/Images/icons-phone.png";
 import icon_email from "../../assets/Images/icons-mail.png";
+import { toast, ToastContainer } from "react-toastify";
 
 function Contact() {
   const navigate = useNavigate();
+  const sentMessage = () => {
+    toast.success("Message sent successfully",
+      {
+        theme: "colored",
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      }
+    );
+  }
   return (
     <>
+    <ToastContainer/>
       <div className="container">
         <div className="flex gap-3 my-5 ">
           <button onClick={() => navigate("/")} className="text-gray-400">
@@ -71,7 +85,6 @@ function Contact() {
             </div>
 
             <form className="w-100  mx-auto">
-              
               <textarea
                 id="message"
                 rows="8"
@@ -80,8 +93,12 @@ function Contact() {
               ></textarea>
             </form>
             <div className="flex justify-end">
-            <button className="text-white rounded mt-4  bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm w-full sm:w-auto px-5 py-3 text-center">Send Message</button>
-            </div> 
+              <button
+              onClick={()=>sentMessage()}
+               className="text-white rounded mt-4  bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm w-full sm:w-auto px-5 py-3 text-center">
+                Send Message
+              </button>
+            </div>
           </div>
         </div>
       </div>

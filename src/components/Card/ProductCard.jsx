@@ -10,73 +10,92 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSlice";
 import { addToFavList, removeFromFavList } from "../../redux/slices/favSlice";
 import { Button, Modal } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Card({ name, price, image, id, product , isFlash }) {
-  const [isAdded, setIsAdded] = useState(false);
-  const[isloggedIn, setIsLoggedIn] = useState(false)
+function Card({ name, price, image, id, product, isFlash }) {
+  
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
   const favList = useSelector((state) => state.Fav.favProducts);
   const favproduct = favList.find((product) => product.id === id);
   const user = useSelector((state) => state.auth.user);
+
   const goToDetailes = (id) => {
     navigation(`/products/${id}`);
   };
 
   const handleAddToCart = () => {
-    dispatch(addToCart(product));
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 700);
-  };
-
-  const toggleFavourite = () => {
-    if (favproduct) {
-      dispatch(removeFromFavList(product));
+    if (!user) {
+      toast.error(
+       
+        <div className="flex justify-between items-center rounded w-100  ">
+          <p className="m-0">You should login first</p>
+          <button className="btn bg-danger text-white " onClick={() => navigation("/sing up")}>Login</button>
+        </div>
+        ,
+        {  
+          theme: "colored",
+        },
+      );
+      return;
     } else {
-      dispatch(addToFavList(product));
+      dispatch(addToCart(product));
+      toast.success("Product added to cart successfully",{
+        theme: "colored",
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+       
     }
   };
 
-  const handleClose = () => setIsAdded(false);
-const handleCloseloggedIn = () => setIsLoggedIn(false)
+  const toggleFavourite = () => {
+    if (!user) {
+      toast.error(<div className="flex justify-between items-center rounded w-100  ">
+        <p className="m-0">You should login first</p>
+        <button className="btn bg-danger text-white " onClick={() => navigation("/sing up")}>Login</button>
+      </div>
+      ,
+      {  
+        theme: "colored",
+      },);
+      return;
+    } else {
+      if (favproduct) {
+        dispatch(removeFromFavList(product));
+      } else {
+        dispatch(addToFavList(product));
+      }
+    }
+
+    // Hide the confirmation modal after 700 milliseconds
+  };
+
   return (
     <>
-      <Modal
-        show={isAdded}
-        onHide={handleClose}
-        backdrop="true"
-        keyboard={false} 
-      >
-        <Modal.Body className="flex justify-between items-center rounded bg-green-500 text-white  ">Product added to cart successfully
-        </Modal.Body>
-      </Modal>
-
-
-
-      <Modal
-        show={isloggedIn}
-        onHide={handleCloseloggedIn}
-        backdrop="true"
-        keyboard={false}
-      >
-        <Modal.Body className="flex justify-between items-center rounded bg-red-500 text-white  ">you are not logged in
-        <Button variant="danger" onClick={(() => handleCloseloggedIn() , () => navigation("/sing up"))}>
-          Sing Up
-        </Button>
-        </Modal.Body>
-      </Modal>
-
+      <ToastContainer />
+      
       <div
-        style={isFlash ? { height: "400px", minWidth: "280px", maxWidth:"300px" } : { height: "350px", minWidth: "280px" , maxWidth:"300px"}}
+        style={
+          isFlash
+            ? { height: "400px", minWidth: "280px", maxWidth: "300px" }
+            : { height: "350px", minWidth: "280px", maxWidth: "300px" }
+        }
         className="flex flex-col rounded  relative shadow-md"
       >
-        {isFlash&&(<div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
-         {Math.floor(price / 1000)}%
-         
-        </div>)}
+        {isFlash && (
+          <div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
+            {Math.floor(price / 1000)}%
+          </div>
+        )}
         <div
-          onClick={user ?  toggleFavourite : () => setIsLoggedIn(true)}
+          onClick={toggleFavourite}
           className="absolute top-3 right-3 w-8 h-8 z-1 cursor-pointer hover:bg-gray-200 rounded-4xl bg-white flex justify-center items-center"
         >
           <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
@@ -92,7 +111,7 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
             <img src={image} style={{ width: "115px", height: "180px" }} />
 
             <div
-              onClick={user ? handleAddToCart : () => setIsLoggedIn(true)}
+              onClick={handleAddToCart}
               className="w-100 text-center py-3 text-white bg-black cursor-cell  add-to-cart"
             >
               Add to Cart
@@ -115,38 +134,48 @@ const handleCloseloggedIn = () => setIsLoggedIn(false)
           >
             {name}
           </p>
-          <div className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}>
+          <div
+            className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}
+          >
             <div className="flex gap-4 ">
-            <p className="text-red-700">${price}</p>
-            {isFlash&&<p className="text-gray-500 " style={{ textDecoration: "line-through" }}>${price + (100* Math.floor(price / 1000))}</p>}
+              <p className="text-red-700">${price}</p>
+              {isFlash && (
+                <p
+                  className="text-gray-500 "
+                  style={{ textDecoration: "line-through" }}
+                >
+                  ${price + 100 * Math.floor(price / 1000)}
+                </p>
+              )}
             </div>
-           <div className="flex gap-4 items-center ">
-           <ul className="flex align-items-center me-1 ps-0 ">
-              <li>
-                <img src={star} alt="" />
-              </li>
-              <li>
-                <img src={star} alt="" />
-              </li>
-              <li> 
-                <img src={star} alt="" />
-              </li>
-              <li>
-                <img src={unstar} alt="" />
-              </li>
-              <li>
-                <img src={unstar} alt="" />
-              </li>
-            </ul>
-            <p className="text-gray-500"> (95)</p>
-            <button
-              onClick={user ? (() => goToDetailes(id)): () => setIsLoggedIn(true)}
-              className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
-            >
-              Details
-            </button>
-           </div>
-          
+            <div className="flex gap-4 items-center ">
+              <ul className="flex align-items-center me-1 ps-0 ">
+                <li>
+                  <img src={star} alt="" />
+                </li>
+                <li>
+                  <img src={star} alt="" />
+                </li>
+                <li>
+                  <img src={star} alt="" />
+                </li>
+                <li>
+                  <img src={unstar} alt="" />
+                </li>
+                <li>
+                  <img src={unstar} alt="" />
+                </li>
+              </ul>
+              <p className="text-gray-500"> (95)</p>
+              <button
+                onClick={
+                  user ? () => goToDetailes(id) : () => setIsLoggedIn(true)
+                }
+                className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
+              >
+                Details
+              </button>
+            </div>
           </div>
         </div>
       </div>

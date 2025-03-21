@@ -14,7 +14,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Card({ name, price, image, id, product, isFlash }) {
-  
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
@@ -29,20 +28,23 @@ function Card({ name, price, image, id, product, isFlash }) {
   const handleAddToCart = () => {
     if (!user) {
       toast.error(
-       
         <div className="flex justify-between items-center rounded w-100  ">
           <p className="m-0">You should login first</p>
-          <button className="btn bg-danger text-white " onClick={() => navigation("/sing up")}>Login</button>
-        </div>
-        ,
-        {  
+          <button
+            className="btn bg-danger text-white "
+            onClick={() => navigation("/sing up")}
+          >
+            Login
+          </button>
+        </div>,
+        {
           theme: "colored",
-        },
+        }
       );
       return;
-    } else {
+    } 
       dispatch(addToCart(product));
-      toast.success("Product added to cart successfully",{
+      toast.success("Product added to cart successfully", {
         theme: "colored",
         position: "top-center",
         autoClose: 1000,
@@ -51,41 +53,63 @@ function Card({ name, price, image, id, product, isFlash }) {
         pauseOnHover: true,
         draggable: true,
       });
-       
-    }
+    
   };
 
   const toggleFavourite = () => {
     if (!user) {
-      toast.error(<div className="flex justify-between items-center rounded w-100  ">
-        <p className="m-0">You should login first</p>
-        <button className="btn bg-danger text-white " onClick={() => navigation("/sing up")}>Login</button>
-      </div>
-      ,
-      {  
-        theme: "colored",
-      },);
+      toast.error(
+        <div className="flex justify-between items-center rounded w-100  ">
+          <p className="m-0">You should login first</p>
+          <button
+            className="btn bg-danger text-white "
+            onClick={() => navigation("/sing up")}
+          >
+            Login
+          </button>
+        </div>,
+        {
+          theme: "colored",
+        }
+      );
       return;
+
+
     } else {
       if (favproduct) {
         dispatch(removeFromFavList(product));
       } else {
-        dispatch(addToFavList(product));
+        if (user) {
+          dispatch(addToFavList(product));
+        }
       }
     }
 
     // Hide the confirmation modal after 700 milliseconds
   };
+  const alertFun = () => {
+    toast.error(
+      <div className="flex justify-between items-center rounded w-100  ">
+        <p className="m-0">You should login first</p>
+        <button
+          className="btn bg-danger text-white "
+          onClick={() => navigation("/sing up")}
+        >
+          Login
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
       <ToastContainer />
-      
+
       <div
         style={
           isFlash
-            ? { height: "400px", minWidth: "280px", maxWidth: "300px" }
-            : { height: "350px", minWidth: "280px", maxWidth: "300px" }
+            ? { height: "400px", minWidth: "280px", maxWidth: "280px" }
+            : { height: "350px", minWidth: "280px", maxWidth: "280px" }
         }
         className="flex flex-col rounded  relative shadow-md"
       >
@@ -168,9 +192,7 @@ function Card({ name, price, image, id, product, isFlash }) {
               </ul>
               <p className="text-gray-500"> (95)</p>
               <button
-                onClick={
-                  user ? () => goToDetailes(id) : () => setIsLoggedIn(true)
-                }
+                onClick={user ? () => goToDetailes(id) : () => alertFun()}
                 className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
               >
                 Details

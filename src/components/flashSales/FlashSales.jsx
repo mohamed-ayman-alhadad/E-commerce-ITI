@@ -18,8 +18,8 @@ export default function FlashSales() {
 
   const navigate = useNavigate();
   const day = new Date().getDay();
-  const hours = new Date().getHours();
-  const minutes = new Date().getMinutes();
+  const hours = new Date().getHours().toString().padStart(2, "0");
+  const minutes = new Date().getMinutes().toString().padStart(2, "0");
   const seconds = new Date().getSeconds();
   return (
     <>
@@ -45,7 +45,7 @@ export default function FlashSales() {
             <h2 className="font-bold text-danger ">:</h2>
             <div className="flex flex-col items-center gap-1">
               <p className="text-xs m-0 ">Hours</p>
-              <h2>0{hours}</h2>
+              <h2>{hours}</h2>
             </div>
             <h2 className="font-bold text-danger ">:</h2>
             <div className="flex flex-col items-center gap-1">

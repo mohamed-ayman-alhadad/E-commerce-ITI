@@ -5,12 +5,15 @@ import {
   increment,
   removeFromCart,
 } from "../../redux/slices/cartSlice";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 
 function CartItem({ product }) {
   const [removed, setRemoved] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef(null);
   const dispatch = useDispatch();
+
   const handleRemoveFromCart = () => {
     dispatch(removeFromCart(product));
   };
@@ -18,10 +21,34 @@ function CartItem({ product }) {
   const handleIncreament = () => {
     dispatch(increment(product));
   };
+
   const hamdleDecreament = () => {
     dispatch(decrement(product));
   };
+
   const showModal = () => setRemoved(true);
+
+  const toggleTooltip = (e) => {
+    e.stopPropagation();
+    setShowTooltip(!showTooltip);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setShowTooltip(false);
+      }
+    };
+
+    if (showTooltip) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTooltip]);
+
   return (
     <>
       {removed && (
@@ -94,7 +121,7 @@ function CartItem({ product }) {
           </Modal.Body>
         </Modal>
       )}
-      <div className="d-flex justify-between shadow-sm items-center mb-5 text-center relative ">
+      <div className="d-flex justify-between shadow-sm items-center mb-5 text-center relative">
         <div
           data-modal-target="popup-modal"
           data-modal-toggle="popup-modal"
@@ -103,20 +130,30 @@ function CartItem({ product }) {
         >
           <img src={remove} className="w-3 h-3" />
         </div>
-        <div className="ps-4 flex gap-2 items-center text-sm w-25 fw-bold ">
+        <div className="ps-4 flex gap-2 items-center text-sm w-25 fw-bold relative">
           <img src={product.imageCover} className="w-12 h-15" />
-          <span
-            style={{
-              whiteSpace: "nowrap",
-              width: "110px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {product.title}
-          </span>
+          <div className="relative" ref={tooltipRef}>
+            <span
+              onClick={toggleTooltip}
+              className="cursor-pointer sm:cursor-default w-[20px] sm:w-[110px]"
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "block"
+              }}
+            >
+              {product.title}
+            </span>
+            {showTooltip && (
+              <div className="absolute z-10 left-0 mt-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg sm:hidden">
+                {product.title}
+                <div className="absolute -top-2 left-4 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-gray-900"></div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="p-4 w-25 ">${product.price}</div>
+        <div className="p-4 w-25">${product.price}</div>
         <div className="p-4 w-25 flex justify-center">
           <div className="relative flex items-center max-w-[8rem]">
             <button
@@ -175,7 +212,7 @@ function CartItem({ product }) {
             </button>
           </div>
         </div>
-        <div className="p-4 w-25 ">${product.price * product.cartQuantity}</div>
+        <div className="p-4 w-25">${product.price * product.cartQuantity}</div>
       </div>
     </>
   );

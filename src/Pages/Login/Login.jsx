@@ -59,14 +59,14 @@ function Login() {
   });
   return (
     <>
-      <div className="flex mt-5 gap-5">
-        <img src={sideImage} alt="sideImage" />
-        <div className="w-50 px-5 flex flex-col justify-center ">
+      <div className="flex flex-col md:flex-row mt-5 gap-5 items-center justify-center">
+        <img src={sideImage} alt="sideImage" className="hidden md:block w-1/2 max-w-md" />
+        <div className="w-full md:w-1/2 px-5 flex flex-col justify-center">
           {apiError && <ErrorAlert error={apiError} />}
-          <h1 className="mb-3">Log in to Exclusive</h1>
-          <p className="mb-5">Enter your details below</p>
+          <h1 className="mb-3 text-2xl md:text-3xl">Log in to Exclusive</h1>
+          <p className="mb-5 text-sm md:text-base">Enter your details below</p>
 
-          <form onSubmit={Formik.handleSubmit} className="max-w-md">
+          <form onSubmit={Formik.handleSubmit} className="w-full max-w-md mx-auto">
             <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
               <input
                 onChange={Formik.handleChange}

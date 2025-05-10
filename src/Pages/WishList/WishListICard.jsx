@@ -7,32 +7,36 @@ import Cart from "../../assets/Images/Cart2.png";
 import { addToCart } from "../../redux/slices/cartSlice";
 import { Modal, Toast } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function WishListCard({ product }) {
   const [removed, setRemoved] = useState(false);
-  const[isAdded,setIsAdded]=useState(false)
+  const [isAdded, setIsAdded] = useState(false);
   const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleRemoveFromFavList = () => {
     dispatch(removeFromFavList(product));
   };
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
-    toast.success("Product added to cart successfully",{
-            theme: "colored",
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-     
+    toast.success("Product added to cart successfully", {
+      theme: "colored",
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+  const goToDetailes = (id) => {
+    navigate(`/products/${id}`);
   };
   const showModal = () => setRemoved(true);
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       {removed && (
         <Modal
           show={removed}
@@ -104,7 +108,6 @@ function WishListCard({ product }) {
         </Modal>
       )}
 
-       
       <div
         style={{ height: "350px", width: "280px" }}
         className="flex flex-col rounded  relative shadow-md"

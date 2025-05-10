@@ -76,16 +76,16 @@ function SingUp() {
   });
   return (
     <>
-      <div className="flex mt-5 gap-5">
-        <div className="w-50  sticky top-0 h-screen overflow-y-auto " style={{scrollbarWidth:"none"}} >
+      <div className="flex flex-col lg:flex-row mt-5 gap-5">
+        <div className="w-full lg:w-1/2 sticky top-0 h-screen overflow-y-auto hidden lg:block" style={{scrollbarWidth:"none"}} >
           <img src={sideImage} alt="sideImage" className="w-full" />
         </div>
-        <div className="w-50 px-5 flex flex-col justify-center ">
+        <div className="w-full lg:w-1/2 px-4 lg:px-5 flex flex-col justify-center">
           {apiError && <ErrorAlert error={apiError} />}
-          <h1 className="mb-3">Create an account</h1>
-          <p className="mb-5">Enter your details below</p>
+          <h1 className="text-2xl lg:text-3xl mb-3">Create an account</h1>
+          <p className="text-sm lg:text-base mb-5">Enter your details below</p>
 
-          <form onSubmit={Formik.handleSubmit} className="max-w-md">
+          <form onSubmit={Formik.handleSubmit} className="w-full max-w-md mx-auto">
             <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
               <input
                 onBlur={Formik.handleBlur}
@@ -192,10 +192,9 @@ function SingUp() {
               data-modal-target="popup-modal"
               data-modal-toggle="popup-modal"
               type="submit"
-              className="w-full rounded mb-3 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium  text-sm px-5 py-3 text-center"
+              className="w-full rounded mb-3 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-3 text-center"
             >
-              {loading ?<Spinner /> :
-              "Create Account"}
+              {loading ? <Spinner /> : "Create Account"}
             </button>
             {/* {apiError !== null && (
               <div
@@ -251,15 +250,15 @@ function SingUp() {
                 </div>
               </div>
             )} */}
-            <button className="w-full rounded mb-4 border-1 px-5 py-3 text-center font-medium flex justify-center gap-2 ">
-              <img src={google} alt="google" />
+            <button className="w-full rounded mb-4 border-1 px-5 py-3 text-center font-medium flex justify-center items-center gap-2 text-sm lg:text-base">
+              <img src={google} alt="google" className="w-5 h-5" />
               Sign up with Google
             </button>
 
-            <p className="text-center fs-5 flex justify-center ">
+            <p className="text-center text-sm lg:text-base flex justify-center items-center">
               Already have an account?{" "}
               <button
-              type="button"
+                type="button"
                 onClick={() => navigate("/login")}
                 className="text-red-600 px-3"
               >

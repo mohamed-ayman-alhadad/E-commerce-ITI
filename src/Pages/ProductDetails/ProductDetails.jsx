@@ -12,6 +12,7 @@ import delevary from "../../assets/Images/icon-delivery.png";
 import Return from "../../assets/Images/Icon-return.png";
 import { Spinner } from "react-bootstrap";
 import { addToCart } from "../../redux/slices/cartSlice";
+
 function ProductDetails() {
   const navigate = useNavigate();
   const [Sizes, setSizes] = useState([
@@ -88,160 +89,156 @@ const goToBuy = () => {
       }
     };
     if (isLoading) {
-      return <div className="flex justify-center items-center h-screen"><Spinner animation="border" variant="danger" /></div>;
+      return (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner animation="border" variant="danger" />
+        </div>
+      );
     }
   return (
-    <div className="container ">
-      <div className="flex align-middle mb-5 mt-5  " >
-        <span
-          style={{
-            width: "15px",
-            height: "40px",
-            backgroundColor: "red",
-            borderRadius: "20%",
-          }}
-        ></span>
-        <p className="ms-2 text-red-700 mb-0 mt-2">Product Details</p>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex items-center mb-8">
+        <span className="w-2 h-10 bg-red-600 rounded-md"></span>
+        <h1 className="ms-3 text-2xl font-bold text-red-700">Product Details</h1>
       </div>
 
-      <div className="w-100 flex gap-4 ">
-        <div className=" sticky top-0 h-screen overflow-y-auto flex" style={{ width: "60%" }}>
-          <div className="w-25 h-150 flex flex-col overflow-auto   gap-2 " style={{scrollbarWidth:"none"}}>
-            { data?.images.map((image, index) => (
-              <img key={index} src={image} className="w-40 h-35 bg-gray-300 " />
-            ))}
-          </div>
-          <div className="w-75 h-150">
-            <img src={data?.imageCover} className="w-75 h-100 bg-gray-300" />
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Product Images Section */}
+        <div className="lg:w-3/5">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto lg:h-[600px] scrollbar-hide">
+              {data?.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  className="w-24 h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                  alt={`Product view ${index + 1}`}
+                />
+              ))}
+            </div>
+            <div className="flex-1">
+              <img
+                src={data?.imageCover}
+                className="w-full h-[500px] object-cover rounded-lg shadow-lg"
+                alt="Main product"
+              />
+            </div>
           </div>
         </div>
-        {/*******************************************************************************************************/}
-        <div style={{ width: "40%" }} className="flex flex-col">
-          <h2>{data?.title}</h2>
-          <div className="flex items-center gap-2">
-            <ul className="flex align-items-center gap-1.5 me-1 p-0 m-0 ">
-              <li>
-                <img src={star} alt="" />
-              </li>
-              <li>
-                <img src={star} alt="" />
-              </li>
-              <li>
-                <img src={star} alt="" />
-              </li>
-              <li>
-                <img src={unstar} alt="" />
-              </li>
-              <li>
-                <img src={unstar} alt="" />
-              </li>
-            </ul>
-            <div className="text-gray-500">(150 Reviews)</div>
-            <span>|</span>
-            <div className="text-green-400">In Stock</div>
-          </div>
-          <p className="fs-3 my-3">${data?.price}.00</p>
-          <p className="text-sm border-b-1 pb-4 border-gray-300">
-            {data?.description}
-          </p>
-          <div className="flex gap-3 items-center mb-2">
-            <span className="fs-4">Colours:</span>
-            <ul className="flex items-center gap-1.5 p-0 m-0 ">
-              <li className="w-4 h-4 bg-blue-400 rounded-full border-2 border-white outline-2 "></li>
-              <li className="w-4 h-4 bg-red-400 rounded-full"></li>
-            </ul>
-          </div>
-          <div className="flex gap-3 items-center mb-3">
-            <span className="fs-4">Sizes:</span>
-            <ul className="flex items-center gap-3 p-0 m-0">
-              {Sizes.map((size) => (
-                <li
-                  onClick={() => chooseSize(size.id)}
-                  className={
-                    size.active
-                      ? "w-8 text-center border border-gray-300 px-2 py-1 bg-red-600 text-white rounded"
-                      : "w-8 text-center rounded border border-gray-300 px-2 py-1"
-                  }
-                >
-                  {size.size}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex gap-4 items-end mb-4">
-            <div className="relative flex items-center max-w-[8rem] mt-2 rounded-3 overflow-auto">
-              <button
-                onClick={() => hamdleDecreament()}
-                type="button"
-                id="decrement-button"
-                data-input-counter-decrement="quantity-input"
-                className="rounded-3 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-2 px-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-              >
-                <svg
-                  className="w-3 h-3 text-gray-900 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 2"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M1 1h16"
+
+        {/* Product Info Section */}
+        <div className="lg:w-2/5 space-y-6">
+          <div>
+            <h2 className="text-3xl font-bold mb-4">{data?.title}</h2>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <img
+                    key={i}
+                    src={i < 3 ? star : unstar}
+                    alt="rating"
+                    className="w-5 h-5"
                   />
-                </svg>
-              </button>
-              <input
-                type="text"
-                id="quantity-input"
-                data-input-counter
-                aria-describedby="helper-text-explanation"
-                className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder={Quantity}
-              ></input>
-              <button
-                onClick={() => handleIncreament()}
-                type="button"
-                id="increment-button"
-                data-input-counter-increment="quantity-input"
-                className="rounded-3 bg-red-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-red-400 border border-gray-300 rounded-e-lg p-2 px-3  h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-              >
-                <svg
-                  className="w-3 h-3 text-white dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </button>
+                ))}
+              </div>
+              <span className="text-gray-500">(150 Reviews)</span>
+              <span className="text-green-500 font-medium">In Stock</span>
             </div>
-            <button onClick={()=> goToBuy()} className=" bg-red-600 px-5 py-2 hover:bg-red-800 text-white rounded-2">Buy Now</button>
-            <button onClick={() => toggleFavourite()} className="border border-gray-300 px-2 py-2 rounded-2">
-                <img src={favproduct ?faved :fav } className="w-6 h-6" /></button>
+            <p className="text-2xl font-bold text-red-600 mb-4">${data?.price}.00</p>
+            <p className="text-gray-600 border-b border-gray-200 pb-6">
+              {data?.description}
+            </p>
           </div>
-          <div className="w-100 border-1 mt-4 rounded-2">
-            <div className="w-100 p-3 flex gap-3 border-b">
-              <img src={delevary} className="w-15 h-15" />
-              <div>
-                <p className="font-bold fs-5 m-0 pb-2">Free Delivery</p>
-                <p className="text-sm m-0">Enter your postal code for Delivery Availability</p>
+
+          {/* Colors */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <span className="text-lg font-semibold">Colors:</span>
+              <div className="flex gap-2">
+                <button className="w-8 h-8 bg-blue-400 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform"></button>
+                <button className="w-8 h-8 bg-red-400 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform"></button>
               </div>
             </div>
-            <div className="w-100 p-3 flex gap-3">
-              <img src={Return} className="w-15 h-15" />
+
+            {/* Sizes */}
+            <div className="flex items-center gap-4">
+              <span className="text-lg font-semibold">Sizes:</span>
+              <div className="flex gap-2">
+                {Sizes.map((size) => (
+                  <button
+                    key={size.id}
+                    onClick={() => chooseSize(size.id)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-md transition-all ${
+                      size.active
+                        ? "bg-red-600 text-white"
+                        : "border border-gray-300 hover:border-red-600"
+                    }`}
+                  >
+                    {size.size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quantity and Actions */}
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <div className="flex items-center border rounded-lg overflow-hidden">
+                <button
+                  onClick={hamdleDecreament}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  value={Quantity}
+                  readOnly
+                  className="w-16 text-center border-x border-gray-200 py-2"
+                />
+                <button
+                  onClick={handleIncreament}
+                  className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                onClick={goToBuy}
+                className="flex-1 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Buy Now
+              </button>
+              <button
+                onClick={toggleFavourite}
+                className="p-2 border rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <img
+                  src={favproduct ? faved : fav}
+                  alt="favorite"
+                  className="w-6 h-6"
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Delivery Info */}
+          <div className="space-y-4 mt-8">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <img src={delevary} alt="delivery" className="w-12 h-12" />
               <div>
-                <p className="font-bold fs-5 m-0 pb-2">Return Delivery</p>
-                <p className="text-sm m-0">Free 30 Days Delivery Returns. Details</p>
+                <h3 className="font-bold text-lg mb-1">Free Delivery</h3>
+                <p className="text-gray-600 text-sm">
+                  Enter your postal code for Delivery Availability
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <img src={Return} alt="return" className="w-12 h-12" />
+              <div>
+                <h3 className="font-bold text-lg mb-1">Return Delivery</h3>
+                <p className="text-gray-600 text-sm">
+                  Free 30 Days Delivery Returns. Details
+                </p>
               </div>
             </div>
           </div>

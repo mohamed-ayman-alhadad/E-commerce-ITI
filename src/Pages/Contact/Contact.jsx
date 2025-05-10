@@ -23,8 +23,8 @@ function Contact() {
   return (
     <>
     <ToastContainer/>
-      <div className="container">
-        <div className="flex gap-3 my-5 ">
+      <div className="container px-4 mx-auto">
+        <div className="flex gap-3 my-5">
           <button onClick={() => navigate("/")} className="text-gray-400">
             Home
           </button>
@@ -32,8 +32,8 @@ function Contact() {
           <button className="font-medium">Contact</button>
         </div>
 
-        <div className="flex gap-3">
-          <div className="w-25 p-4 shadow-sm">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full lg:w-1/4 p-4 shadow-sm">
             <div className="flex gap-2 items-center mb-4">
               <img src={icon_phone} alt="phone" />
               <p className="mb-0 font-medium">Call To Us</p>
@@ -43,7 +43,7 @@ function Contact() {
               Phone: +8801611112222
             </p>
 
-            <div className="flex gap-2 items-center my-4 ">
+            <div className="flex gap-2 items-center my-4">
               <img src={icon_email} alt="phone" />
               <p className="mb-0 font-medium">Write To US</p>
             </div>
@@ -53,9 +53,9 @@ function Contact() {
             <p className="text-sm">Emails: customer@exclusive.com</p>
             <p className="text-sm">Emails: support@exclusive.com</p>
           </div>
-          <div className="w-75 shadow-sm p-5 ">
-            <div className="flex w-100 gap-3 justify-center mb-4">
-              <div className=" w-70 ">
+          <div className="w-full lg:w-3/4 shadow-sm p-4 lg:p-5">
+            <div className="flex flex-col md:flex-row w-full gap-3 mb-4">
+              <div className="w-full md:w-1/3">
                 <input
                   type="text"
                   id="name"
@@ -64,7 +64,7 @@ function Contact() {
                   required
                 />
               </div>
-              <div className=" w-70">
+              <div className="w-full md:w-1/3">
                 <input
                   type="email"
                   id="email"
@@ -73,7 +73,7 @@ function Contact() {
                   required
                 />
               </div>
-              <div className=" w-70">
+              <div className="w-full md:w-1/3">
                 <input
                   type="tel"
                   id="phone"
@@ -84,7 +84,7 @@ function Contact() {
               </div>
             </div>
 
-            <form className="w-100  mx-auto">
+            <form className="w-full mx-auto">
               <textarea
                 id="message"
                 rows="8"
@@ -94,8 +94,8 @@ function Contact() {
             </form>
             <div className="flex justify-end">
               <button
-              onClick={()=>sentMessage()}
-               className="text-white rounded mt-4  bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm w-full sm:w-auto px-5 py-3 text-center">
+                onClick={()=>sentMessage()}
+                className="text-white rounded mt-4 bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm w-full sm:w-auto px-5 py-3 text-center">
                 Send Message
               </button>
             </div>

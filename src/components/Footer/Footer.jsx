@@ -25,66 +25,69 @@ function Footer() {
             theme === "light" ? "bg-black text-white" : "bg-gray-300 text-dark"
           }`}
         >
-          <div className="container gap-3">
-            <div className="row">
-              <div className="col-md-3 relative h-37">
-                <h5>Exclusive</h5>
+          <div className="container">
+            <div className="row g-4">
+              <div className="col-12 col-md-3 mb-4 mb-md-0">
+                <h5 className="mb-3">Exclusive</h5>
                 <h6 className="my-3">Subscribe</h6>
-                <p className="text-xs">Get 10% off your first order</p>
-                <input
-                  type="email"
-                  className=" bg-black  text-white text-sm py-2 px-3 border rounded"
-                  placeholder="Enter your email"
-                />
-                <img
-                  src={vector}
-                  alt=""
-                  className="absolute bottom-3 right-18 w-5"
-                />
+                <p className="text-xs mb-2">Get 10% off your first order</p>
+                <div className="position-relative">
+                  <input
+                    type="email"
+                    className="form-control bg-black text-white text-sm py-2 px-3 border rounded w-100"
+                    placeholder="Enter your email"
+                  />
+                  <img
+                    src={vector}
+                    alt=""
+                    className="position-absolute end-0 top-50 translate-middle-y me-2"
+                    style={{ width: "20px" }}
+                  />
+                </div>
               </div>
-              <div className="col-md-3">
-                <h5>Support</h5>
-                <p className="text-xs">
+              <div className="col-12 col-md-3 mb-4 mb-md-0">
+                <h5 className="mb-3">Support</h5>
+                <p className="text-xs mb-2">
                   111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
                 </p>
-                <p className="text-xs">exclusive@gmail.com</p>
-                <p className="text-xs">+88015-88888-9999</p>
+                <p className="text-xs mb-2">exclusive@gmail.com</p>
+                <p className="text-xs mb-2">+88015-88888-9999</p>
               </div>
-              <div className="col-md-2">
-                <h5>Account</h5>
-                <p className="text-xs">My Account</p>
-                <p className="text-xs">Login / Register</p>
-                <p className="text-xs">Cart</p>
-                <p className="text-xs">Wishlist</p>
-                <p className="text-xs">Shop</p>
+              <div className="col-6 col-md-2 mb-4 mb-md-0">
+                <h5 className="mb-3">Account</h5>
+                <p className="text-xs mb-2">My Account</p>
+                <p className="text-xs mb-2">Login / Register</p>
+                <p className="text-xs mb-2">Cart</p>
+                <p className="text-xs mb-2">Wishlist</p>
+                <p className="text-xs mb-2">Shop</p>
               </div>
-              <div className="col-md-2">
-                <h5>Quick Links</h5>
-                <p className="text-xs">Privacy Policy</p>
-                <p className="text-xs">Terms Of Use</p>
-                <p className="text-xs">FAQ</p>
-                <p className="text-xs">Contact</p>
+              <div className="col-6 col-md-2 mb-4 mb-md-0">
+                <h5 className="mb-3">Quick Links</h5>
+                <p className="text-xs mb-2">Privacy Policy</p>
+                <p className="text-xs mb-2">Terms Of Use</p>
+                <p className="text-xs mb-2">FAQ</p>
+                <p className="text-xs mb-2">Contact</p>
               </div>
-              <div className="col-md-2">
-                <h5>Download App</h5>
-                <p className="text-xs">Save $3 with App New User Only</p>
-                <div className="flex gap-2 mb-3">
-                  <img src={QrCode} alt="" className="w-50 h-100" />
-                  <div className="flex flex-col w-50 ">
-                    <img src={AppStore} alt="" className="w-100 h-50" />
-                    <img src={GooglePlay} alt="" className="w-100 h-50 " />
+              <div className="col-12 col-md-2">
+                <h5 className="mb-3">Download App</h5>
+                <p className="text-xs mb-3">Save $3 with App New User Only</p>
+                <div className="d-flex gap-2 mb-3">
+                  <img src={QrCode} alt="" className="img-fluid" style={{ maxWidth: "50%" }} />
+                  <div className="d-flex flex-column" style={{ width: "50%" }}>
+                    <img src={AppStore} alt="" className="img-fluid mb-2" />
+                    <img src={GooglePlay} alt="" className="img-fluid" />
                   </div>
                 </div>
-                <div className="flex gap-4">
-                  <FaFacebookF />
-                  <CiTwitter />
-                  <FaInstagram />
-                  <FaLinkedinIn />
+                <div className="d-flex gap-4 mt-3">
+                  <FaFacebookF className="fs-5" />
+                  <CiTwitter className="fs-5" />
+                  <FaInstagram className="fs-5" />
+                  <FaLinkedinIn className="fs-5" />
                 </div>
               </div>
             </div>
-            <div className="text-center text-gray-500 mt-5 ">
-              <p>© 2022 Rimel. All rights reserved.</p>
+            <div className="text-center text-gray-500 mt-5">
+              <p className="mb-0">© 2022 Rimel. All rights reserved.</p>
             </div>
           </div>
         </footer>

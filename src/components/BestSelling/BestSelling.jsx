@@ -53,7 +53,7 @@ export default function BestSelling() {
             </div>
           </div>
         )}
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-wrap gap-2 justify-center">
           {data?.map((item, index) => {
             if (index < 4) {
               return (

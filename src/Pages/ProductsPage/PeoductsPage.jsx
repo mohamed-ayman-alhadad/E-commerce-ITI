@@ -1,73 +1,141 @@
-import React, { useEffect } from "react";
-import ProductLable from "../../components/productLable/productLable";
-import Card from "../../components/Card/ProductCard";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Card from "../../components/Card/ProductCard";
 import { fetchAllProducts } from "../../redux/slices/ProductsSlice";
 
 function ProductsPage() {
-  let products = useSelector((state) => state.products);
   const dispatch = useDispatch();
-  console.log(products, "jkbvkvnklervnlerv");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { products, isLoading, error } = useSelector((state) => state.products);
+  const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "";
+  const [sortBy, setSortBy] = useState("featured");
 
   useEffect(() => {
     dispatch(fetchAllProducts());
-  }, []);
+  }, [dispatch]);
 
-  if (products.isLoading === true) {
+  const visibleProducts = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase();
+    const selectedCategory = category.trim().toLocaleLowerCase();
+    const filtered = products.filter((product) => {
+      const searchableText = [
+        product.title,
+        product.description,
+        product.category?.name,
+        product.brand?.name,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase();
+      const matchesQuery = !query || searchableText.includes(query);
+      const matchesCategory =
+        !selectedCategory ||
+        product.category?.name?.toLocaleLowerCase() === selectedCategory ||
+        product.subcategory?.some(
+          (subcategory) =>
+            subcategory.name?.toLocaleLowerCase() === selectedCategory
+        );
+      return matchesQuery && matchesCategory;
+    });
+
+    if (sortBy === "price-ascending") {
+      return filtered.sort((first, second) => first.price - second.price);
+    }
+    if (sortBy === "price-descending") {
+      return filtered.sort((first, second) => second.price - first.price);
+    }
+    if (sortBy === "rating") {
+      return filtered.sort(
+        (first, second) =>
+          (second.ratingsAverage || 0) - (first.ratingsAverage || 0)
+      );
+    }
+    return filtered;
+  }, [products, search, category, sortBy]);
+
+  const clearFilters = () => {
+    setSearchParams({});
+    setSortBy("featured");
+  };
+
+  if (isLoading) {
     return (
-      <>
-        {/* <div className="flex container items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-          <div role="status">
-            <svg
-              aria-hidden="true"
-              className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-              viewBox="0 0 100 101"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                fill="currentColor"
-              />
-              <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                fill="currentFill"
-              />
-            </svg>
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div> */}
-
-        <div className="flex  container items-center justify-center  h-56  rounded-lg  ">
-          <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-            loading...
-          </div>
-        </div>
-      </>
+      <div className="page-container py-20 text-center" role="status">
+        Loading products…
+      </div>
     );
   }
-  if (products.error) {
-    return <div>{products.error}</div>;
+
+  if (error) {
+    return (
+      <div className="page-container py-20 text-center" role="alert">
+        <h1 className="section-heading">We couldn’t load the products</h1>
+        <p className="mt-3 text-gray-600">{error}</p>
+        <button className="primary-action mt-3" onClick={() => dispatch(fetchAllProducts())}>
+          Try again
+        </button>
+      </div>
+    );
   }
+
   return (
-    <>
-      <div className="container mt-5">
-        <ProductLable />
+    <div className="page-container py-10">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-gray-500">
+        <Link to="/" className="text-inherit no-underline hover:underline">Home</Link>
+        <span aria-hidden="true"> / </span>
+        <span className="text-gray-900">Shop</span>
+      </nav>
+
+      <div className="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p className="eyebrow mb-2">The shop</p>
+          <h1 className="section-heading">Explore the collection</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            {visibleProducts.length} {visibleProducts.length === 1 ? "product" : "products"}
+            {search && <> matching “{search}”</>}
+            {category && <> in {category}</>}
+          </p>
+        </div>
+        <label className="flex items-center gap-3 text-sm">
+          <span className="whitespace-nowrap">Sort by</span>
+          <select
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value)}
+            className="min-h-11 rounded border border-gray-300 bg-white px-3"
+          >
+            <option value="featured">Featured</option>
+            <option value="price-ascending">Price: low to high</option>
+            <option value="price-descending">Price: high to low</option>
+            <option value="rating">Customer rating</option>
+          </select>
+        </label>
       </div>
-      <div className="container justify-center flex flex-wrap  gap-4 py-5">
-          {products.products &&
-            products.products.map((product) => (
-              <Card
-                key={product.id}
-                id={product.id}
-                name={product.title}
-                price={product.price}
-                image={product.imageCover}
-                product={product}
-              />
-            ))}
-      </div>
-    </>
+
+      {!visibleProducts.length ? (
+        <section className="rounded-lg border border-gray-200 bg-stone-50 px-5 py-16 text-center">
+          <h2 className="text-xl font-semibold">No products found</h2>
+          <p className="mt-2 text-gray-600">Try a different search or clear your filters.</p>
+          <button type="button" className="primary-action mt-5" onClick={clearFilters}>
+            Clear filters
+          </button>
+        </section>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {visibleProducts.map((product) => (
+            <Card
+              key={product.id}
+              id={product.id}
+              name={product.title}
+              price={product.price}
+              image={product.imageCover}
+              product={product}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

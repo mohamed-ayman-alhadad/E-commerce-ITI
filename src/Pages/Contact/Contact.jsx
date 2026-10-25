@@ -1,108 +1,61 @@
-import React from "react";
-import style from "./Contact.module.css";
-import { useNavigate } from "react-router-dom";
-import icon_phone from "../../assets/Images/icons-phone.png";
-import icon_email from "../../assets/Images/icons-mail.png";
-import { toast, ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Contact() {
-  const navigate = useNavigate();
-  const sentMessage = () => {
-    toast.success("Message sent successfully",
-      {
-        theme: "colored",
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      }
-    );
-  }
+  const [notice, setNotice] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setNotice("Message sending is not connected yet. Your message has not been submitted.");
+  };
+
   return (
-    <>
-    <ToastContainer/>
-      <div className="container px-4 mx-auto">
-        <div className="flex gap-3 my-5">
-          <button onClick={() => navigate("/")} className="text-gray-400">
-            Home
-          </button>
-          <span>/</span>
-          <button className="font-medium">Contact</button>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-1/4 p-4 shadow-sm">
-            <div className="flex gap-2 items-center mb-4">
-              <img src={icon_phone} alt="phone" />
-              <p className="mb-0 font-medium">Call To Us</p>
-            </div>
-            <p className="text-sm">We are available 24/7, 7 days a week.</p>
-            <p className="text-sm border-b pb-4 border-gray-300">
-              Phone: +8801611112222
+    <div className="page-container py-10">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-gray-500">
+        <Link to="/" className="text-inherit no-underline hover:underline">Home</Link>
+        <span aria-hidden="true"> / </span>
+        <span className="text-gray-900">Contact</span>
+      </nav>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.7fr_1.3fr]">
+        <section>
+          <p className="eyebrow mb-2">We’re here to help</p>
+          <h1 className="section-heading">Get in touch</h1>
+          <p className="mt-3 max-w-md leading-7 text-gray-600">
+            The contact form is ready for your message, but sending is not connected to a support service yet.
+          </p>
+          <div className="mt-7 rounded-lg border border-gray-200 p-5">
+            <h2 className="font-semibold">Support</h2>
+            <p className="mb-0 mt-2 text-sm leading-6 text-gray-600">
+              Our contact form is currently being set up. Please check back soon for direct support options.
             </p>
-
-            <div className="flex gap-2 items-center my-4">
-              <img src={icon_email} alt="phone" />
-              <p className="mb-0 font-medium">Write To US</p>
-            </div>
-            <p className="text-sm">
-              Fill out our form and we will contact you within 24 hours.
-            </p>
-            <p className="text-sm">Emails: customer@exclusive.com</p>
-            <p className="text-sm">Emails: support@exclusive.com</p>
           </div>
-          <div className="w-full lg:w-3/4 shadow-sm p-4 lg:p-5">
-            <div className="flex flex-col md:flex-row w-full gap-3 mb-4">
-              <div className="w-full md:w-1/3">
-                <input
-                  type="text"
-                  id="name"
-                  className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Your Name"
-                  required
-                />
-              </div>
-              <div className="w-full md:w-1/3">
-                <input
-                  type="email"
-                  id="email"
-                  className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Your Email"
-                  required
-                />
-              </div>
-              <div className="w-full md:w-1/3">
-                <input
-                  type="tel"
-                  id="phone"
-                  className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Your Phone"
-                  required
-                />
-              </div>
+        </section>
+        <section className="rounded-lg border border-gray-200 p-5 sm:p-8" aria-labelledby="contact-form-title">
+          <h2 id="contact-form-title" className="mb-5 text-xl font-semibold">Write to us</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <label className="text-sm font-medium">
+                Your name
+                <input name="name" autoComplete="name" required className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3" />
+              </label>
+              <label className="text-sm font-medium">
+                Email address
+                <input type="email" name="email" autoComplete="email" required className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3" />
+              </label>
             </div>
-
-            <form className="w-full mx-auto">
-              <textarea
-                id="message"
-                rows="8"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Your Message"
-              ></textarea>
-            </form>
-            <div className="flex justify-end">
-              <button
-                onClick={()=>sentMessage()}
-                className="text-white rounded mt-4 bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm w-full sm:w-auto px-5 py-3 text-center">
-                Send Message
-              </button>
+            <label className="block text-sm font-medium">
+              Message
+              <textarea name="message" rows="6" required className="mt-2 w-full rounded border border-gray-300 p-3" />
+            </label>
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="mb-0 text-xs text-gray-500">This form does not submit to a support service yet.</p>
+              <button type="submit" className="primary-action">Send message</button>
             </div>
-          </div>
-        </div>
+          </form>
+          {notice && <p className="mt-4 text-sm text-amber-800" role="status">{notice}</p>}
+        </section>
       </div>
-    </>
+    </div>
   );
 }
 

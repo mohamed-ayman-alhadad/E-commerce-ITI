@@ -1,11 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const storedUser = localStorage.getItem("user");
+const storedDetails = localStorage.getItem("userDetails");
+let userDetails = null;
+
+if (storedDetails) {
+    try {
+        userDetails = JSON.parse(storedDetails);
+    } catch (error) {
+        console.error("Unable to restore saved user details.", error);
+    }
+}
 
 const authSlice = createSlice({
     name: "auth",
     initialState: {
-        user: null,
-        userDetails: null
+        user: storedUser,
+        userDetails
     },
     reducers: {
          login: (state, action) => {
@@ -13,10 +24,10 @@ const authSlice = createSlice({
          },
          logout : (state) => {
             state.user = null
+            state.userDetails = null
          },
          setUserDetails: (state, action) => {
-            
-            state.userDetails = {...action.payload , addres :"Tanta , Egypt"}
+            state.userDetails = action.payload
          }
     }
 })

@@ -1,140 +1,115 @@
-import { useDispatch, useSelector } from "react-redux";
-import React, { useContext } from "react";
-import ThemeContext from "../../Contexts/StatesContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
 import isEmpty from "../../assets/Images/empty.png";
 import { clearCart } from "../../redux/slices/cartSlice";
 
 function Cart() {
-  const { Cartproducts } = useSelector((state) => state.cart);
-  const { theme } = useContext(ThemeContext);
-  const navigation = useNavigate();
+  const products = useSelector((state) => state.cart.Cartproducts);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [couponMessage, setCouponMessage] = useState("");
+  const subtotal = products.reduce(
+    (total, product) => total + product.price * product.cartQuantity,
+    0
+  );
 
-  const continueShoping = () => {
-    navigation("/products");
-  };
-
-  const clearCartItems = () => {
-    dispatch(clearCart());
-  };
+  if (products.length === 0) {
+    return (
+      <section className="page-container flex min-h-[55vh] flex-col items-center justify-center py-16 text-center">
+        <img src={isEmpty} className="mb-5 h-28 w-28 object-contain" alt="" />
+        <p className="eyebrow">Your bag</p>
+        <h1 className="section-heading mt-1">Your cart is waiting</h1>
+        <p className="mt-2 max-w-md text-gray-600">Take a look around and find something you love.</p>
+        <Link to="/products" className="primary-action mt-5">Continue shopping</Link>
+      </section>
+    );
+  }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      {Cartproducts.length === 0 ? (
-        <div className="flex flex-col sm:flex-row justify-center items-center min-h-[60vh] my-auto">
-          <img src={isEmpty} className="w-32 sm:w-35 px-4" alt="Empty cart" />
-          <h1 className="opacity-90 text-danger text-center sm:text-left">Your cart is empty</h1>
+    <div className="page-container py-10">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-gray-500">
+        <Link to="/" className="text-inherit no-underline hover:underline">Home</Link>
+        <span aria-hidden="true"> / </span>
+        <span className="text-gray-900">Shopping cart</span>
+      </nav>
+
+      <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="eyebrow mb-2">Your bag</p>
+          <h1 className="section-heading">Shopping cart</h1>
         </div>
-      ) : (
-        <div className="container mx-auto">
-          <div className="mt-10 sm:mt-20">
-            <ul className="flex gap-3 pb-8 sm:pb-15 ps-0">
-              <li>
-                <NavLink
-                  style={{ textDecoration: "none" }}
-                  className={({ isActive }) =>
-                    isActive ? "text-blue-500" : "text-black opacity-50"
-                  }
-                  to={"/"}
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li>/</li>
-              <li>
-                <NavLink
-                  style={{ textDecoration: "none" }}
-                  className={({ isActive }) =>
-                    isActive ? "text-blue-500" : "text-black opacity-50"
-                  }
-                >
-                  Cart
-                </NavLink>
-              </li>
-            </ul>
+        <button
+          type="button"
+          onClick={() => dispatch(clearCart())}
+          className="text-sm text-gray-600 underline underline-offset-4 hover:text-red-700"
+        >
+          Clear cart
+        </button>
+      </div>
 
-            <div className="overflow-x-auto">
-              <ul className="flex justify-between shadow-sm mb-5 text-center p-0 min-w-[600px]">
-                <li className="py-4 w-1/4 flex justify-center sm:justify-start sm:ps-12">Product</li>
-                <li className="p-4 w-1/4">Price</li>
-                <li className="p-4 w-1/4">Quantity</li>
-                <li className="p-4 w-1/4">Subtotal</li>
-              </ul>
-            </div>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(290px,0.8fr)]">
+        <section aria-label="Cart items">
+          <div className="hidden grid-cols-[minmax(0,2fr)_1fr_1fr_1fr] border-b border-gray-300 pb-3 text-xs font-semibold uppercase tracking-wide text-gray-500 sm:grid">
+            <span>Product</span>
+            <span className="text-center">Price</span>
+            <span className="text-center">Quantity</span>
+            <span className="text-right">Subtotal</span>
           </div>
+          {products.map((product) => <CartItem key={product.id} product={product} />)}
+          <Link to="/products" className="mt-6 inline-flex text-sm font-semibold text-inherit no-underline hover:underline">
+            ← Continue shopping
+          </Link>
 
-          {Cartproducts.map((product) => (
-            <CartItem key={product.id} product={product} />
-          ))}
-
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="mt-8 flex flex-col gap-2 sm:flex-row">
+            <label htmlFor="coupon-code" className="visually-hidden">Coupon code</label>
+            <input
+              id="coupon-code"
+              type="text"
+              placeholder="Coupon code"
+              className="min-h-12 flex-1 rounded border border-gray-300 px-4"
+              onChange={() => setCouponMessage("")}
+            />
             <button
-              onClick={() => continueShoping()}
-              className="border rounded border-gray-300 text-gray-900 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 text-sm px-5 py-2.5 text-center"
+              type="button"
+              onClick={() => setCouponMessage("Coupon redemption is not connected yet.")}
+              className="min-h-12 rounded border border-gray-300 px-5 text-sm font-semibold hover:bg-gray-50"
             >
-              Return to Shop
-            </button>
-            <button 
-              onClick={()=>clearCartItems()} 
-              className="border rounded border-gray-300 text-gray-900 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 text-sm px-5 py-2.5 text-center"
-            >
-              Clear Cart
+              Apply coupon
             </button>
           </div>
+          {couponMessage && <p className="mt-2 text-sm text-gray-600" role="status">{couponMessage}</p>}
+        </section>
 
-          <div className="flex flex-col lg:flex-row justify-between mt-5 gap-8">
-            <div className="flex flex-col sm:flex-row w-full lg:w-1/2 gap-3">
-              <input
-                type="text"
-                placeholder="Coupon code"
-                className="px-4 py-3 w-full sm:w-1/2 border border-gray-300 focus:outline-none rounded"
-              />
-              <button className="border md:h-20 bg-red-600 rounded border-gray-300 text-white hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-200 text-sm px-5 py-2.5 text-center">
-                Apply Coupon
-              </button>
+        <aside className="h-fit rounded-lg border border-gray-300 p-5 sm:p-6" aria-labelledby="cart-summary-title">
+          <h2 id="cart-summary-title" className="text-lg font-semibold">Order summary</h2>
+          <div className="mt-5 space-y-3 text-sm">
+            <div className="flex justify-between gap-3">
+              <span className="text-gray-600">Subtotal</span>
+              <span className="font-medium">${subtotal.toFixed(2)}</span>
             </div>
-            <div className="w-full lg:w-1/2 rounded-lg border-1 p-4">
-              <p className="text-xl mb-5">Cart Total</p>
-              <div className="flex justify-between py-2 border-b-1 border-gray-300">
-                <p className="m-0 text-sm">Subtotal:</p>
-                <p className="m-0 text-sm">
-                  $
-                  {Cartproducts.reduce(
-                    (total, product) =>
-                      total + product.price * product.cartQuantity,
-                    0
-                  )}
-                </p>
-              </div>
-              <div className="flex justify-between py-2 border-b-1 border-gray-300">
-                <p className="m-0 text-sm">Shipping:</p>
-                <p className="m-0 text-sm">Free</p>
-              </div>
-              <div className="flex justify-between py-2 border-b-1 border-gray-300">
-                <p className="m-0 text-sm">Total:</p>
-                <p className="m-0 text-sm">
-                  $
-                  {Cartproducts.reduce(
-                    (total, product) =>
-                      total + product.price * product.cartQuantity,
-                    0
-                  )}
-                </p>
-              </div>
-              <div className="flex justify-center">
-                <button 
-                  onClick={() => navigation("/checkout")} 
-                  className="border mt-4 bg-red-600 rounded border-gray-300 text-white hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-red-200 text-sm px-5 py-2.5 text-center w-full sm:w-auto"
-                >
-                  Checkout
-                </button>
-              </div>
+            <div className="flex justify-between gap-3">
+              <span className="text-gray-600">Shipping</span>
+              <span className="font-medium">Free</span>
+            </div>
+            <div className="flex justify-between gap-3 border-t border-gray-200 pt-3 text-base">
+              <span className="font-semibold">Total</span>
+              <span className="font-semibold">${subtotal.toFixed(2)}</span>
             </div>
           </div>
-        </div>
-      )}
+          <button
+            type="button"
+            onClick={() => navigate("/checkout")}
+            className="primary-action mt-6 w-full"
+          >
+            Continue to checkout
+          </button>
+          <p className="mt-3 mb-0 text-xs leading-5 text-gray-500">
+            Your order total includes free shipping.
+          </p>
+        </aside>
+      </div>
     </div>
   );
 }

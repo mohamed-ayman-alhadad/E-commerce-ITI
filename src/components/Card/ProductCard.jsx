@@ -1,208 +1,115 @@
-import React, { use, useContext, useState } from "react";
-import star from "../../assets/Images/stared.png";
-import unstar from "../../assets/Images/Unstar.png";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import ThemeContext from "../../Contexts/StatesContext";
-import fav from "../../assets/Images/fav.png";
-import faved from "../../assets/Images/faved.png";
-import overview from "../../assets/Images/overview.png";
 import { useDispatch, useSelector } from "react-redux";
+import { FiHeart, FiShoppingBag, FiStar } from "react-icons/fi";
+import { toast } from "react-toastify";
+import ThemeContext from "../../Contexts/StatesContext";
 import { addToCart } from "../../redux/slices/cartSlice";
 import { addToFavList, removeFromFavList } from "../../redux/slices/favSlice";
-import { Button, Modal } from "react-bootstrap";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import styles from "./ProductCard.module.css";
 
-function Card({ name, price, image, id, product, isFlash }) {
-  const navigation = useNavigate();
+function ProductCard({ name, price, image, id, product }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { theme } = useContext(ThemeContext);
   const favList = useSelector((state) => state.Fav.favProducts);
-  const favproduct = favList.find((product) => product.id === id);
+  const isFavorite = favList.some((favorite) => favorite.id === id);
   const user = useSelector((state) => state.auth.user);
+  const cartQuantity = useSelector(
+    (state) =>
+      state.cart.Cartproducts.find((cartProduct) => cartProduct.id === id)
+        ?.cartQuantity || 0
+  );
 
-  const goToDetailes = (id) => {
-    navigation(`/products/${id}`);
+  const requireLogin = () => {
+    toast.error(
+      <span>
+        Please log in to continue.{" "}
+        <button className={styles.toastLink} onClick={() => navigate("/login")}>
+          Log in
+        </button>
+      </span>,
+      { theme: "colored" }
+    );
   };
 
   const handleAddToCart = () => {
     if (!user) {
-      toast.error(
-        <div className="flex justify-between items-center rounded w-100  ">
-          <p className="m-0">You should login first</p>
-          <button
-            className="btn bg-danger text-white "
-            onClick={() => navigation("/sing up")}
-          >
-            Login
-          </button>
-        </div>,
-        {
-          theme: "colored",
-        }
-      );
+      requireLogin();
       return;
-    } 
-      dispatch(addToCart(product));
-      toast.success("Product added to cart successfully", {
-        theme: "colored",
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    
+    }
+    if (Number.isFinite(Number(product.quantity)) && cartQuantity >= Number(product.quantity)) {
+      toast.error("You’ve reached the available stock for this product.", { theme: "colored" });
+      return;
+    }
+
+    dispatch(addToCart(product));
+    toast.success("Added to your cart", { theme: "colored" });
   };
 
   const toggleFavourite = () => {
     if (!user) {
-      toast.error(
-        <div className="flex justify-between items-center rounded w-100  ">
-          <p className="m-0">You should login first</p>
-          <button
-            className="btn bg-danger text-white "
-            onClick={() => navigation("/sing up")}
-          >
-            Login
-          </button>
-        </div>,
-        {
-          theme: "colored",
-        }
-      );
+      requireLogin();
       return;
-
-
-    } else {
-      if (favproduct) {
-        dispatch(removeFromFavList(product));
-      } else {
-        if (user) {
-          dispatch(addToFavList(product));
-        }
-      }
     }
+    dispatch(isFavorite ? removeFromFavList(product) : addToFavList(product));
+  };
 
-    // Hide the confirmation modal after 700 milliseconds
+  const openDetails = () => {
+    if (!user) {
+      requireLogin();
+      return;
+    }
+    navigate(`/products/${id}`);
   };
-  const alertFun = () => {
-    toast.error(
-      <div className="flex justify-between items-center rounded w-100  ">
-        <p className="m-0">You should login first</p>
-        <button
-          className="btn bg-danger text-white "
-          onClick={() => navigation("/sing up")}
-        >
-          Login
-        </button>
-      </div>
-    );
-  };
+
+  const rating = Number(product?.ratingsAverage);
+  const ratingCount = Number(product?.ratingsQuantity);
 
   return (
-    <>
-      <ToastContainer />
-
-      <div
-        style={
-          isFlash
-            ? { height: "400px", minWidth: "280px", maxWidth: "280px" }
-            : { height: "350px", minWidth: "280px", maxWidth: "280px" }
-        }
-        className="flex flex-col rounded  relative shadow-md"
-      >
-        {isFlash && (
-          <div className="absolute text-white top-3 left-3 w-10 h-6 z-1 rounded bg-red-700 flex justify-center items-center">
-            {Math.floor(price / 1000)}%
-          </div>
-        )}
-        <div
+    <article className={styles.card} data-theme={theme}>
+      <div className={styles.imageArea}>
+        <button
+          type="button"
           onClick={toggleFavourite}
-          className="absolute top-3 right-3 w-8 h-8 z-1 cursor-pointer hover:bg-gray-200 rounded-4xl bg-white flex justify-center items-center"
+          className={styles.favorite}
+          aria-label={isFavorite ? `Remove ${name} from wishlist` : `Add ${name} to wishlist`}
+          aria-pressed={isFavorite}
         >
-          <img src={favproduct ? faved : fav} className="w-5 h-5"></img>
-        </div>
-        <div className="absolute top-13 cursor-pointer right-3 w-8 h-8 z-1 rounded-4xl bg-white flex justify-center items-center">
-          <img src={overview} className="w-7 h-7"></img>
-        </div>
-        <div className=" p-0">
-          <div
-            className="flex  justify-center items-center bg-gray-100 rounded-t-lg product-container "
-            style={{ width: "100%", height: "270px" }}
-          >
-            <img src={image} style={{ width: "115px", height: "180px" }} />
-
-            <div
-              onClick={handleAddToCart}
-              className="w-100 text-center py-3 text-white bg-black cursor-cell  add-to-cart"
-            >
-              Add to Cart
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-b-lg relative">
-          <p
-            className={
-              theme === "light"
-                ? "pt-2 m-0  h-10 overflow-hidden ms-1"
-                : "pt-2 m-0 h-10 overflow-hidden ms-1 text-black"
-            }
-            style={{
-              whiteSpace: "nowrap",
-              width: "200px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {name}
-          </p>
-          <div
-            className={isFlash ? "flex flex-col ms-1  " : "flex gap-2 ms-1  "}
-          >
-            <div className="flex gap-4 ">
-              <p className="text-red-700">${price}</p>
-              {isFlash && (
-                <p
-                  className="text-gray-500 "
-                  style={{ textDecoration: "line-through" }}
-                >
-                  ${price + 100 * Math.floor(price / 1000)}
-                </p>
-              )}
-            </div>
-            <div className="flex gap-4 items-center ">
-              <ul className="flex align-items-center me-1 ps-0 ">
-                <li>
-                  <img src={star} alt="" />
-                </li>
-                <li>
-                  <img src={star} alt="" />
-                </li>
-                <li>
-                  <img src={star} alt="" />
-                </li>
-                <li>
-                  <img src={unstar} alt="" />
-                </li>
-                <li>
-                  <img src={unstar} alt="" />
-                </li>
-              </ul>
-              <p className="text-gray-500"> (95)</p>
-              <button
-                onClick={user ? () => goToDetailes(id) : () => alertFun()}
-                className=" bg-red-600 hover:bg-red-800 text-white rounded-2 px-2 py-0.5 mx-3 mb-2"
-              >
-                Details
-              </button>
-            </div>
-          </div>
-        </div>
+          <FiHeart aria-hidden="true" className={isFavorite ? styles.favoriteActive : ""} />
+        </button>
+        <button type="button" className={styles.productImageButton} onClick={openDetails}>
+          <img src={image} alt={name} loading="lazy" />
+        </button>
+        <button type="button" className={styles.addToCart} onClick={handleAddToCart}>
+          <FiShoppingBag aria-hidden="true" />
+          Add to cart
+        </button>
       </div>
-    </>
+      <div className={styles.details}>
+        {product?.category?.name && <p className={styles.category}>{product.category.name}</p>}
+        <button type="button" className={styles.productName} onClick={openDetails}>
+          {name}
+        </button>
+        <div className={styles.priceRow}>
+          <span className={styles.price}>${Number(price).toFixed(2)}</span>
+          {Number.isFinite(rating) && rating > 0 && (
+            <span
+              className={styles.rating}
+              aria-label={`${rating.toFixed(1)} out of 5 stars${ratingCount > 0 ? `, ${ratingCount} reviews` : ""}`}
+            >
+              <FiStar aria-hidden="true" />
+              {rating.toFixed(1)}
+              {ratingCount > 0 && <span className={styles.ratingCount}>({ratingCount})</span>}
+            </span>
+          )}
+        </div>
+        <button type="button" className={styles.detailsLink} onClick={openDetails}>
+          View details <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </article>
   );
 }
 
-export default Card;
+export default ProductCard;

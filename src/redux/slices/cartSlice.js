@@ -13,10 +13,17 @@ const cartSlice = createSlice({
       const existingProduct = state.Cartproducts.find(
         (product) => product.id === action.payload.id
       );
+      const availableQuantity = Number(action.payload.quantity);
 
       if (existingProduct) {
+        if (
+          Number.isFinite(availableQuantity) &&
+          availableQuantity >= 0 &&
+          existingProduct.cartQuantity >= availableQuantity
+        ) return;
         existingProduct.cartQuantity += 1;
       } else {
+        if (Number.isFinite(availableQuantity) && availableQuantity <= 0) return;
         state.Cartproducts.push({ ...action.payload, cartQuantity: 1 });
       }
 
@@ -24,22 +31,35 @@ const cartSlice = createSlice({
       state.totalPrice += action.payload.price;
     },
     removeFromCart: (state, action) => {
-      state.Cartproducts = state.Cartproducts.filter(
-        (product) => product.id !== action.payload.id
+      const product = state.Cartproducts.find(
+        (item) => item.id === action.payload.id
       );
+      if (!product) return;
 
-      state.totalQuantity = state.totalQuantity -action.payload.cartQuantity;
+      state.Cartproducts = state.Cartproducts.filter(
+        (item) => item.id !== action.payload.id
+      );
+      state.totalQuantity -= product.cartQuantity;
+      state.totalPrice -= product.price * product.cartQuantity;
+      if (state.totalQuantity <= 0) {
+        state.totalQuantity = 0;
+        state.totalPrice = 0;
+      }
     },
     increment: (state, action) => {
       const product = state.Cartproducts.find(
         (p) => p.id === action.payload.id
       );
       if (product) {
+        const availableQuantity = Number(product.quantity);
+        if (
+          Number.isFinite(availableQuantity) &&
+          availableQuantity >= 0 &&
+          product.cartQuantity >= availableQuantity
+        ) return;
         product.cartQuantity += 1;
         state.totalPrice += product.price;
         state.totalQuantity += 1;
-      console.log("0000", product);
-
       }
       
     },
@@ -54,6 +74,30 @@ const cartSlice = createSlice({
         state.totalQuantity -= 1;
       }
     },
+    addToCartQuantity: (state, action) => {
+      const { product: item, quantity } = action.payload;
+      const requestedAmount = Math.max(1, Number(quantity) || 1);
+      const existingProduct = state.Cartproducts.find(
+        (product) => product.id === item.id
+      );
+      const availableQuantity = Number(item.quantity);
+      const currentQuantity = existingProduct?.cartQuantity || 0;
+      const amount =
+        Number.isFinite(availableQuantity) && availableQuantity >= 0
+          ? Math.min(requestedAmount, availableQuantity - currentQuantity)
+          : requestedAmount;
+
+      if (amount < 1) return;
+
+      if (existingProduct) {
+        existingProduct.cartQuantity += amount;
+      } else {
+        state.Cartproducts.push({ ...item, cartQuantity: amount });
+      }
+
+      state.totalQuantity += amount;
+      state.totalPrice += item.price * amount;
+    },
     clearCart: (state) => {
       state.Cartproducts = [];
       state.totalQuantity = 0;
@@ -66,6 +110,7 @@ const cartSlice = createSlice({
 
 export const {
   addToCart,
+  addToCartQuantity,
   removeFromCart,
   increment,
   decrement,

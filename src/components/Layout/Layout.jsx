@@ -1,40 +1,23 @@
-import React from "react";
-import { useState , useEffect} from "react";
-import style from "./Layout.module.css"
-import Header from "../Header/Header";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { setProducts } from "../../redux/slices/ProductsSlice";
-import instance from "../../Utils/axiosInstance";
 
 function Layout() {
-    
-   
-    // const dispatch = useDispatch();
-    // const { data, isLoading, error } = useQuery({
-    //     queryKey: ["products"],
-    //     queryFn: async () => {
-    //       const res = await instance.get("/products");
-    //       console.log();
-          
-    //       return res.data;
-    //     },
-    //   });
-    
-    //   useEffect(() => {
-    //     if (data) {
-    //       dispatch(setProducts(data));
-    //     }
-    //   },[data]);
-    return <>
-        <Header />
-        <div className="container-fluid mb-5 p-0" style={{ minHeight: "40vh" }}>
-            <Outlet />
-        </div>
-        <Footer   />
+  return (
+    <>
+      <Header />
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <main id="main-content">
+        <Suspense fallback={<p className="page-container py-16 text-center" role="status">Loading page…</p>}>
+          <Outlet />
+        </Suspense>
+      </main>
+      <Footer />
+      <ToastContainer position="top-center" newestOnTop />
     </>
+  );
 }
 
 export default Layout;

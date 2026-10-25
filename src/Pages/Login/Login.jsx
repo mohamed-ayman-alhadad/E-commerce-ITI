@@ -1,20 +1,21 @@
-import { useFormik } from "formik";
-import sideImage from "../../assets/Images/Side_Image.png";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import instance from "../../Utils/axiosInstance";
+import { useDispatch } from "react-redux";
 import { Spinner } from "react-bootstrap";
+import sideImage from "../../assets/Images/Side_Image.png";
 import ErrorAlert from "../../components/ErrorAlert/ErrorAlert";
-import { useDispatch, useSelector } from "react-redux";
+import instance from "../../Utils/axiosInstance";
 import { login, setUserDetails } from "../../redux/slices/authSlice";
 
 function Login() {
-  const [apiError, setApiError] = useState(null);
+  const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispath = useDispatch();
-  const validationSchema = Yup.object().shape({
+  const dispatch = useDispatch();
+
+  const validationSchema = Yup.object({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string()
       .required("Password is required")
@@ -22,106 +23,99 @@ function Login() {
       .max(20, "Password must be at most 20 characters")
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
+        "Use at least one lowercase letter, one uppercase letter, one number, and one special character"
       ),
   });
+
   const handleLogin = async (values) => {
     setLoading(true);
-    console.log(values, "values");
-    await instance
-      .post("/auth/signin", values)
-      .then((api) => {
-        if (api.data.message === "success") {
-          setLoading(false);
-          navigate("/");
-          localStorage.setItem("user", api.data.token);
-          localStorage.setItem("userDetails", JSON.stringify(api.data.user));
-          console.log(api.data.token);
-          console.log(api.data.user);
-          dispath(login(api.data.token));
-          dispath(setUserDetails(res.data.user));
-        }
-      })
-      .catch((api) => {
-        setLoading(false);
-        setApiError(api.response.data.message);
-        console.log(api.response.data.message);
-      });
+    setApiError("");
+    try {
+      const response = await instance.post("/auth/signin", values);
+      if (response.data.message !== "success") {
+        throw new Error(response.data.message || "Sign in was unsuccessful.");
+      }
+
+      localStorage.setItem("user", response.data.token);
+      localStorage.setItem("userDetails", JSON.stringify(response.data.user));
+      dispatch(login(response.data.token));
+      dispatch(setUserDetails(response.data.user));
+      navigate("/");
+    } catch (error) {
+      setApiError(
+        error.response?.data?.message ||
+          error.message ||
+          "We couldn’t sign you in. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  let Formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
     onSubmit: handleLogin,
-    validationSchema: validationSchema,
+    validationSchema,
   });
-  return (
-    <>
-      <div className="flex flex-col md:flex-row mt-5 gap-5 items-center justify-center">
-        <img src={sideImage} alt="sideImage" className="hidden md:block w-1/2 max-w-md" />
-        <div className="w-full md:w-1/2 px-5 flex flex-col justify-center">
-          {apiError && <ErrorAlert error={apiError} />}
-          <h1 className="mb-3 text-2xl md:text-3xl">Log in to Exclusive</h1>
-          <p className="mb-5 text-sm md:text-base">Enter your details below</p>
 
-          <form onSubmit={Formik.handleSubmit} className="w-full max-w-md mx-auto">
-            <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
-              <input
-                onChange={Formik.handleChange}
-                value={Formik.values.email}
-                type="email"
-                name="email"
-                id="email"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-red-500 focus:outline-none focus:ring-0 focus:border-red-600 peer"
-                placeholder=" "
-              />
-              <label
-                htmlFor="email"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-1 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-red-600 peer-focus:dark:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Enter your email
-              </label>
-            </div>
-            {Formik.touched.email && Formik.errors.email && (
-              <ErrorAlert error={Formik.errors.email} />
-            )}
-            <div className="relative z-0 w-full mb-4 border-b border-gray-300 group">
-              <input
-                onChange={Formik.handleChange}
-                value={Formik.values.password}
-                type="password"
-                name="password"
-                id="password"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-red-500 focus:outline-none focus:ring-0 focus:border-red-600 peer"
-                placeholder=" "
-              />
-              <label
-                htmlFor="password"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-1 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-red-600 peer-focus:dark:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Password
-              </label>
-            </div>
-            {Formik.touched.password && Formik.errors.password && (
-              <ErrorAlert error={Formik.errors.password} />
-            )}
-            <div className="flex justify-between">
-              <button
-                type="submit"
-                className="text-white bg-red-600 px-5 py-3 rounded hover:bg-red-700 font-medium"
-              >
-                {loading ? <Spinner /> : "Login"}
-              </button>
-              <button type="button" className="text-red-600">
-                Forget Password
-              </button>
-            </div>
-          </form>
-        </div>
+  return (
+    <div className="page-container grid min-h-[65vh] grid-cols-1 items-center gap-10 py-10 md:grid-cols-2">
+      <div className="hidden overflow-hidden rounded-lg bg-stone-100 md:block">
+        <img src={sideImage} alt="" className="h-[520px] w-full object-cover" />
       </div>
-    </>
+      <section className="mx-auto w-full max-w-md" aria-labelledby="login-title">
+        <p className="eyebrow mb-2">Welcome back</p>
+        <h1 id="login-title" className="section-heading">Log in to your account</h1>
+        <p className="mt-2 mb-6 text-gray-600">Enter your details below to continue shopping.</p>
+        {apiError && <ErrorAlert error={apiError} />}
+
+        <form onSubmit={formik.handleSubmit} noValidate className="space-y-5">
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-medium">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              aria-invalid={Boolean(formik.touched.email && formik.errors.email)}
+              className="min-h-12 w-full rounded border border-gray-300 px-3"
+            />
+            {formik.touched.email && formik.errors.email && (
+              <p className="mt-1 text-sm text-red-700" role="alert">{formik.errors.email}</p>
+            )}
+          </div>
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              aria-invalid={Boolean(formik.touched.password && formik.errors.password)}
+              className="min-h-12 w-full rounded border border-gray-300 px-3"
+            />
+            {formik.touched.password && formik.errors.password && (
+              <p className="mt-1 text-sm text-red-700" role="alert">{formik.errors.password}</p>
+            )}
+          </div>
+          <button type="submit" disabled={loading} className="primary-action w-full disabled:cursor-wait disabled:opacity-70">
+            {loading ? <><Spinner size="sm" className="me-2" /> Signing in…</> : "Log in"}
+          </button>
+        </form>
+        <p className="mt-6 text-center text-sm text-gray-600">
+          New here? <Link to="/sing up" className="font-semibold text-red-800 underline underline-offset-4">Create an account</Link>
+        </p>
+        <p className="mt-3 text-center text-sm text-gray-600">
+          Need help? <Link to="/contact" className="underline underline-offset-4">View contact page</Link>
+        </p>
+      </section>
+    </div>
   );
 }
 

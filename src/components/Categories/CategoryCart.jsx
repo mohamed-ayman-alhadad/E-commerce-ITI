@@ -1,14 +1,18 @@
-import React from 'react'
+import { Link } from "react-router-dom";
 
-export default function CategoryCart({item}) {
+export default function CategoryCart({ item }) {
   return (
-    <div className='flex flex-col items-center gap-3 p-4 justify-center border rounded hover:shadow-md transition-shadow duration-200'>
-      <img 
-        src={item.image} 
-        alt={item.name} 
-        className='w-12 h-12 sm:w-16 sm:h-16 object-contain' 
+    <Link
+      to={`/products?category=${encodeURIComponent(item.name)}`}
+      className="group flex min-w-[150px] flex-col items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white p-5 text-inherit no-underline transition-colors hover:border-gray-400 hover:bg-stone-50 sm:min-w-[180px]"
+    >
+      <img
+        src={item.image}
+        alt=""
+        loading="lazy"
+        className="h-14 w-14 object-contain transition-transform group-hover:scale-105"
       />
-      <p className='text-sm sm:text-base text-center font-medium'>{item.name}</p>
-    </div>
-  )
+      <span className="text-center text-sm font-medium">{item.name}</span>
+    </Link>
+  );
 }

@@ -1,76 +1,65 @@
-import React, { useContext } from "react";
-import { useState, useEffect } from "react";
-import style from "./Header.module.css"
-import Nav from "../Nav/Nav";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ThemeContext from "../../Contexts/StatesContext";
-import { useNavigate } from "react-router-dom";
+import Nav from "../Nav/Nav";
+import style from "./Header.module.css";
+
 function Header() {
-    const {theme, setTheme} = useContext(ThemeContext);
-    const {isOpen, setIsOpen} = useContext(ThemeContext);
-    const {language, setLanguage} = useContext(ThemeContext);
-  const navigate = useNavigate();
-    useEffect(() => {
-        document.documentElement.setAttribute("data-bs-theme", theme);
-        localStorage.setItem("theme", theme);
-    }, [theme]);
+  const { theme, setTheme, isOpen, setIsOpen, language, setLanguage } =
+    useContext(ThemeContext);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-bs-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
-    const changeLanguage = (lang) => {
-        setLanguage(lang);
-        setIsOpen(false);
-    }
-
-    const toggleTheme = () => {
-        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-    };
-
-
-    return <>
-        <div className=" w-100  ">
-            <div className="flex justify-between  gap-5">
-            <div className={theme === "light" ? style.Header : style.Header_Dark}>
-                <button className={theme === "light" ? "px-3 py-1 border-0 btn-dark mx-5" : "px-3 py-1 border-0 btn-gray-300 text-black mx-5"} onClick={toggleTheme}>
-                    {theme === "light" ? "Dark Mode" : "Light Mode"}
+  return (
+    <header className={`${style.header} ${theme === "dark" ? style.headerDark : ""}`}>
+      <div className={style.announcement}>
+        <span>Find something you&apos;ll love in our latest collection.</span>
+        <Link to="/products">Explore the collection</Link>
+      </div>
+      <div className={style.utilityBar}>
+        <button
+          type="button"
+          className={style.utilityButton}
+          onClick={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+          aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+        >
+          {theme === "light" ? "Dark mode" : "Light mode"}
+        </button>
+        <div className="position-relative">
+          <button
+            type="button"
+            className={style.utilityButton}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-haspopup="menu"
+          >
+            {language} <span aria-hidden="true">⌄</span>
+          </button>
+          {isOpen && (
+            <div className={style.languageMenu} role="menu">
+              {["English", "العربية"].map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setLanguage(option);
+                    setIsOpen(false);
+                  }}
+                >
+                  {option}
                 </button>
-
-
-                <div className="w-75 d-flex align-items-center  justify-content-center  d-md-flex d-none  ">
-                    <p className="mb-0">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</p>
-                    <a onClick={() => navigate("/products")} className={theme === "light" ? "px-3 py-1 border-0 text-decoration-none btn-dark" : " text-decoration-none px-3 py-1 border-0 btn-gray-300 text-black"}> shop Now</a>
-                </div>
-                <div className="position-relative end-13 ">
-                    <button
-                        className={theme === "light" ? "px-3 py-1 border-0 btn-dark" : "px-3 py-1 border-0 btn-gray-300 text-black"}
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        {language} <span className=" px-2 ">▼</span>
-                    </button>
-
-                    {isOpen && (
-                        <ul className="position-absolute z-1 bg-white list-unstyled border rounded shadow mt-2 p-2">
-                            <li>
-                                <button className="dropdown-item text-black py-2 px-3 rounded " onClick={() => changeLanguage("English")}>
-                                    English
-                                </button>
-                            </li>
-                            <li className="dropdown-divider my-1"></li>
-                            <li>
-                                <button className="dropdown-item text-black py-2 px-3 rounded " onClick={() => changeLanguage("العربية")}>
-                                    العربية
-                                </button>
-                            </li>
-                        </ul>
-                    )}
-                </div>
-                </div>
-
+              ))}
             </div>
-
-            <Nav theme={theme} />
-        </div >
-        <hr className="mb-0" />
-    </>
+          )}
+        </div>
+      </div>
+      <Nav theme={theme} />
+    </header>
+  );
 }
 
 export default Header;

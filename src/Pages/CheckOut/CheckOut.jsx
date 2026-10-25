@@ -1,197 +1,143 @@
-import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import CheckoutProduct from "../../components/ChechoutProduct/CheckoutProduct";
 import payments from "../../assets/Images/payments.png";
 
 export default function CheckOut() {
   const navigate = useNavigate();
   const cartProducts = useSelector((state) => state.cart.Cartproducts);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [orderNotice, setOrderNotice] = useState("");
+  const subtotal = cartProducts.reduce(
+    (total, product) => total + product.price * product.cartQuantity,
+    0
+  );
+
+  if (cartProducts.length === 0) {
+    return (
+      <section className="page-container flex min-h-[55vh] flex-col items-center justify-center py-16 text-center">
+        <p className="eyebrow">Checkout</p>
+        <h1 className="section-heading mt-1">Your cart is empty</h1>
+        <p className="mt-2 text-gray-600">Add something to your cart before checking out.</p>
+        <Link to="/products" className="primary-action mt-5">Explore products</Link>
+      </section>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Breadcrumb Navigation */}
-      <div className="flex flex-wrap gap-2 items-center text-sm mb-8">
-        <button className="text-gray-400 hover:text-gray-600 transition-colors">Account</button>
-        <span className="text-gray-400">/</span>
-        <button onClick={() => navigate("/profile")} className="text-gray-400 hover:text-gray-600 transition-colors">
-          My Account
-        </button>
-        <span className="text-gray-400">/</span>
-        <button onClick={() => navigate("/products")} className="text-gray-400 hover:text-gray-600 transition-colors">
-          Product
-        </button>
-        <span className="text-gray-400">/</span>
-        <button onClick={() => navigate("/cart")} className="text-gray-400 hover:text-gray-600 transition-colors">
-          View Cart
-        </button>
-        <span className="text-gray-400">/</span>
-        <button className="font-medium text-gray-900">Check Out</button>
+    <div className="page-container py-10">
+      <nav aria-label="Breadcrumb" className="mb-8 text-sm text-gray-500">
+        <Link to="/" className="text-inherit no-underline hover:underline">Home</Link>
+        <span aria-hidden="true"> / </span>
+        <Link to="/cart" className="text-inherit no-underline hover:underline">Cart</Link>
+        <span aria-hidden="true"> / </span>
+        <span className="text-gray-900">Checkout</span>
+      </nav>
+
+      <div className="mb-8">
+        <p className="eyebrow mb-2">Almost yours</p>
+        <h1 className="section-heading">Checkout</h1>
       </div>
 
-      <h1 className="text-2xl font-semibold mb-8">Billing Details</h1>
-
-      {/* Main Content */}
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Billing Form */}
-        <div className="w-full lg:w-1/2 bg-white p-6 rounded-lg shadow-md">
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="fName" className="block text-gray-600 mb-2 text-sm font-medium">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="fName"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter your first name"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="cName" className="block text-gray-600 mb-2 text-sm font-medium">
-                Company Name
-              </label>
-              <input
-                type="text"
-                id="cName"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter company name (optional)"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="addrss" className="block text-gray-600 mb-2 text-sm font-medium">
-                Street Address
-              </label>
-              <input
-                type="text"
-                id="addrss"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter street address"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="apartment" className="block text-gray-600 mb-2 text-sm font-medium">
-                Apartment, floor, etc. (optional)
-              </label>
-              <input
-                type="text"
-                id="apartment"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter apartment details"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="city" className="block text-gray-600 mb-2 text-sm font-medium">
-                Town/City
-              </label>
-              <input
-                type="text"
-                id="city"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter city"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-gray-600 mb-2 text-sm font-medium">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter phone number"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-gray-600 mb-2 text-sm font-medium">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                placeholder="Enter email address"
-              />
-            </div>
-
-            <div className="flex items-center gap-2 mt-4">
-              <input type="checkbox" className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
-              <p className="text-sm text-gray-600">Save this information for next time</p>
-            </div>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
+        <section aria-labelledby="billing-title">
+          <h2 id="billing-title" className="mb-5 text-xl font-semibold">Billing details</h2>
+          <form className="grid grid-cols-1 gap-4 sm:grid-cols-2" onSubmit={(event) => event.preventDefault()}>
+            <label className="text-sm text-gray-600 sm:col-span-2">
+              Full name <span className="text-red-700">*</span>
+              <input type="text" name="name" required autoComplete="name" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
+            <label className="text-sm text-gray-600 sm:col-span-2">
+              Street address <span className="text-red-700">*</span>
+              <input type="text" name="address" required autoComplete="street-address" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
+            <label className="text-sm text-gray-600">
+              Apartment, floor, etc.
+              <input type="text" name="apartment" autoComplete="address-line2" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
+            <label className="text-sm text-gray-600">
+              Town / city <span className="text-red-700">*</span>
+              <input type="text" name="city" required autoComplete="address-level2" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
+            <label className="text-sm text-gray-600">
+              Phone number <span className="text-red-700">*</span>
+              <input type="tel" name="phone" required autoComplete="tel" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
+            <label className="text-sm text-gray-600">
+              Email address <span className="text-red-700">*</span>
+              <input type="email" name="email" required autoComplete="email" className="mt-2 min-h-12 w-full rounded border border-gray-300 px-3 text-gray-900" />
+            </label>
           </form>
-        </div>
+        </section>
 
-        {/* Order Summary */}
-        <div className="w-full lg:w-1/2 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          
-          <div className="space-y-4 mb-6">
-            {cartProducts?.map((product) => (
+        <aside className="h-fit rounded-lg border border-gray-300 p-5 sm:p-6" aria-labelledby="order-summary-title">
+          <h2 id="order-summary-title" className="text-xl font-semibold">Your order</h2>
+          <div className="my-5 space-y-4">
+            {cartProducts.map((product) => (
               <CheckoutProduct key={product.id} product={product} />
             ))}
           </div>
 
-          {/* Payment Methods */}
-          <div className="space-y-4 mb-6">
-            <div className="flex justify-between items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <input type="radio" name="payment" className="w-5 h-5 text-blue-600" />
-                <p className="font-medium">Bank Transfer</p>
-              </div>
-              <img src={payments} alt="Payment methods" className="h-7" />
+          <div className="mb-5 space-y-3 border-y border-gray-200 py-4 text-sm">
+            <div className="flex justify-between gap-3">
+              <span className="text-gray-600">Subtotal</span>
+              <span className="font-medium">${subtotal.toFixed(2)}</span>
             </div>
-
-            <div className="flex items-center gap-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-              <input type="radio" name="payment" className="w-5 h-5 text-blue-600" />
-              <p className="font-medium">Cash on Delivery</p>
+            <div className="flex justify-between gap-3">
+              <span className="text-gray-600">Shipping</span>
+              <span className="font-medium">Free</span>
             </div>
-          </div>
-
-          {/* Order Totals */}
-          <div className="space-y-3 mb-6">
-            <div className="flex justify-between py-2 border-b">
-              <p className="text-gray-600">Subtotal:</p>
-              <p className="font-medium">
-                ${cartProducts.reduce((total, product) => total + product.price * product.cartQuantity, 0).toFixed(2)}
-              </p>
-            </div>
-
-            <div className="flex justify-between py-2 border-b">
-              <p className="text-gray-600">Shipping:</p>
-              <p className="font-medium">Free</p>
-            </div>
-
-            <div className="flex justify-between py-2 border-b">
-              <p className="text-gray-600">Total:</p>
-              <p className="font-medium text-lg">
-                ${cartProducts.reduce((total, product) => total + product.price * product.cartQuantity, 0).toFixed(2)}
-              </p>
+            <div className="flex justify-between gap-3 text-base">
+              <span className="font-semibold">Total</span>
+              <span className="font-semibold">${subtotal.toFixed(2)}</span>
             </div>
           </div>
 
-          {/* Coupon Code */}
-          <div className="flex gap-3 mb-6">
-            <input
-              type="text"
-              placeholder="Enter coupon code"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-            />
-            <button className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-              Apply
-            </button>
-          </div>
+          <fieldset className="mb-5 space-y-3">
+            <legend className="mb-2 text-sm font-semibold">Payment method</legend>
+            <label className="flex cursor-pointer items-center justify-between gap-3 rounded border border-gray-200 p-3">
+              <span className="flex items-center gap-3 text-sm">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="bank"
+                  checked={paymentMethod === "bank"}
+                  onChange={() => setPaymentMethod("bank")}
+                  className="accent-red-700"
+                />
+                Bank transfer
+              </span>
+              <img src={payments} alt="Available bank card brands" className="h-6 w-auto" />
+            </label>
+            <label className="flex cursor-pointer items-center gap-3 rounded border border-gray-200 p-3 text-sm">
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                checked={paymentMethod === "cash"}
+                onChange={() => setPaymentMethod("cash")}
+                className="accent-red-700"
+              />
+              Cash on delivery
+            </label>
+          </fieldset>
 
-          {/* Place Order Button */}
-          <button className="w-full py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:ring-offset-2 font-medium">
-            Place Order
+          <p className="mb-4 text-xs leading-5 text-gray-500">
+            Order placement is not connected to a backend yet. Your cart will not be submitted.
+          </p>
+          <button
+            type="button"
+            onClick={() => setOrderNotice("Order placement is unavailable. Your cart has not been submitted.")}
+            className="primary-action w-full"
+          >
+            Place order
           </button>
-        </div>
+          {orderNotice && <p className="mt-3 text-sm text-red-700" role="alert">{orderNotice}</p>}
+          <button type="button" onClick={() => navigate("/cart")} className="mt-4 w-full text-sm text-gray-600 underline underline-offset-4">
+            Return to cart
+          </button>
+        </aside>
       </div>
     </div>
   );

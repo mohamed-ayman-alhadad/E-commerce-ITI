@@ -1,6 +1,135 @@
- body{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
- }
- @import "tailwindcss";
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #171717;
+  background: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --color-ink: #171717;
+  --color-muted: #71717a;
+  --color-border: #e4e4e7;
+  --color-surface: #f7f7f5;
+  --color-accent: #c24136;
+  --color-accent-hover: #a83229;
+  --content-width: 1280px;
+  --page-gutter: clamp(1rem, 4vw, 3rem);
+  --radius-control: 6px;
+  --radius-card: 10px;
+  --shadow-soft: 0 12px 32px rgb(23 23 23 / 7%);
+}
+
+[data-bs-theme="dark"] {
+  --color-ink: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-border: #3f3f46;
+  --color-surface: #27272a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--color-ink);
+  background: #fff;
+  font-family: inherit;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgb(194 65 54 / 50%);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  color: #fff;
+  background: var(--color-accent);
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 1000;
+  top: 0.5rem;
+  left: 0.5rem;
+  transform: translateY(-160%);
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-control);
+  color: #fff;
+  background: var(--color-accent);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+[data-bs-theme="dark"] body {
+  color: #f4f4f5;
+  background: #18181b;
+}
+
+[data-bs-theme="dark"] .bg-white {
+  background-color: #27272a !important;
+}
+
+[data-bs-theme="dark"] .bg-stone-50,
+[data-bs-theme="dark"] .bg-stone-100,
+[data-bs-theme="dark"] .bg-gray-50,
+[data-bs-theme="dark"] .bg-gray-100 {
+  background-color: #27272a !important;
+}
+
+[data-bs-theme="dark"] .text-gray-900,
+[data-bs-theme="dark"] .text-black {
+  color: #f4f4f5 !important;
+}
+
+[data-bs-theme="dark"] .text-gray-600,
+[data-bs-theme="dark"] .text-gray-500 {
+  color: #a1a1aa !important;
+}
+
+[data-bs-theme="dark"] .border-gray-200,
+[data-bs-theme="dark"] .border-gray-300 {
+  border-color: #3f3f46 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

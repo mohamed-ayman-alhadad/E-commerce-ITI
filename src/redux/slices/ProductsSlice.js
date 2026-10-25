@@ -5,8 +5,6 @@ const fetchAllProducts = createAsyncThunk(
   "products/fetchAllProducts",
   async () => {
     const res = await instance.get("/products");
-    console.log(res.data);
-
     return res.data.data;
   }
 );

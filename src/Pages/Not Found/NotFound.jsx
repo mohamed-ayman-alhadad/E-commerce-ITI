@@ -1,23 +1,14 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
-    const navigate = useNavigate();
-  return (<>
-    <div className="container">
-         <div className="flex gap-3 my-5 ">
-        <button onClick={() => navigate("/")} className="text-gray-400">
-          Home
-        </button>
-        <span>/</span>
-        <button className="font-medium">404 Error</button>
-      </div>
-    </div>
-    <div className="container flex flex-col justify-center items-center gap-5 mb-30">
-        <h1 style={{fontSize:"90px"}}>404 Not Found</h1>
-        <p>Your visited page not found. You may go home page.</p>
-        <button onClick={() => navigate("/")} className="bg-red-600 px-4 py-3 text-white hover:bg-red-800 rounded">Back to Home Page</button>
-    </div>
-    </>
+  return (
+    <section className="page-container flex min-h-[58vh] flex-col items-center justify-center py-16 text-center">
+      <p className="eyebrow">404 · Page not found</p>
+      <h1 className="mt-3 text-6xl font-semibold tracking-tight sm:text-8xl">Lost your way?</h1>
+      <p className="mt-4 max-w-md text-gray-600">
+        The page you’re looking for may have moved or no longer exists.
+      </p>
+      <Link to="/" className="primary-action mt-5">Back to home</Link>
+    </section>
   );
 }
